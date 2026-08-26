@@ -4,256 +4,768 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>班表 · 我的班表行事曆</title>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
 <style>
-  :root{
-    --ink:#f7f7f5;
-    --ink-soft:#282f3d;
-    --paper:#f1f3f8;
-    --paper-dim:#dbe0ea;
-    --dawn:#e0a96d;
-    --dawn-dim:#3d3122;
-    --dusk:#7a8eb8;
-    --dusk-dim:#252d3d;
-    --rest:#729b79;
-    --rest-dim:#223326;
-    --flag:#d06a68;
-    --muted:#5c677d;
-    --line: rgba(241,243,248,0.12);
-    --radius: 14px;
-    font-size: 16px;
-  }
-  *{ box-sizing:border-box; }
-  html,body{ margin:0; padding:0; }
-  body{
-    background: var(--ink);
-    color: var(--paper);
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'PingFang TC', 'Microsoft JhengHei', sans-serif;
-    -webkit-font-smoothing: antialiased;
-    min-height:100vh;
-    padding-bottom: 64px;
-  }
-  .wrap{ max-width: 640px; margin:0 auto; padding: 20px 16px 40px; }
+:root{
+  --ink:#f7f7f5;
+  --ink-soft:#282f3d;
+  --paper:#f1f3f8;
+  --paper-dim:#dbe0ea;
+  --dawn:#e0a96d;
+  --dawn-dim:#3d3122;
+  --dusk:#7a8eb8;
+  --dusk-dim:#252d3d;
+  --rest:#729b79;
+  --rest-dim:#223326;
+  --flag:#d06a68;
+  --muted:#5c677d;
+  --line:rgba(241,243,248,0.12);
+  --radius:14px;
+  font-size:16px;
+}
 
-  /* ---------- Header ---------- */
-  .topbar{
-    display:flex; align-items:center; justify-content:space-between;
-    margin-bottom: 22px;
-  }
-  .brand{ display:flex; flex-direction:column; }
-  .brand .eyebrow{
-    font-family:'IBM Plex Mono', monospace;
-    font-size: 11px; letter-spacing:.18em; color: var(--muted); text-transform:uppercase;
-  }
-  .brand h1{
-    font-family:'Fraunces', serif; font-weight:600; font-size: 26px; margin:2px 0 0;
-    letter-spacing: -0.01em;
-  }
-  .btn{
-    font-family:'Inter', sans-serif; font-weight:600; font-size: 13.5px;
-    border:1px solid var(--line); background: transparent; color: var(--paper);
-    padding: 9px 14px; border-radius: 999px; cursor:pointer;
-    display:inline-flex; align-items:center; gap:6px;
-    transition: background .15s ease, transform .1s ease;
-  }
-  .btn:hover{ background: rgba(241,243,248,0.08); }
-  .btn:active{ transform: scale(0.97); }
-  .btn-primary{ background: var(--paper); color: var(--ink); border-color: var(--paper); }
-  .btn-primary:hover{ background:#fff; }
-  .btn-ghost{ border:none; color: var(--muted); padding: 6px 8px; }
-  .btn-danger{ color:#e57373; border-color: rgba(229,115,115,0.4); }
+*{
+  box-sizing:border-box;
+}
 
-  section{ margin-bottom: 30px; }
-  .section-label{
-    font-family:'IBM Plex Mono', monospace; font-size: 11.5px; letter-spacing:.14em;
-    color: var(--muted); text-transform:uppercase; margin: 0 0 10px 2px;
-  }
+html,body{
+  margin:0;
+  padding:0;
+}
 
-  /* ---------- Punch card (today) ---------- */
-  .punch-card{
-    position:relative;
-    background: var(--paper);
-    color: var(--ink);
-    border-radius: var(--radius);
-    padding: 26px 22px 22px;
-    display:flex; align-items:stretch; gap:18px;
-    box-shadow: 0 18px 40px -18px rgba(0,0,0,0.5);
-  }
-  .punch-card::before, .punch-card::after{
-    content:''; position:absolute; left:14px; right:14px; height:14px;
-    background-image: radial-gradient(circle at 10px 7px, var(--ink) 4.5px, transparent 5.5px);
-    background-size: 22px 14px; background-repeat: repeat-x; background-position: 4px 0;
-  }
-  .punch-card::before{ top:-7px; }
-  .punch-card::after{ bottom:-7px; transform:rotate(180deg); }
-  .punch-left{ flex: 1 1 auto; min-width:0; }
-  .punch-left .weekday{
-    font-family:'IBM Plex Mono', monospace; font-size:12px; letter-spacing:.1em; color:var(--muted);
-    text-transform:uppercase;
-  }
+body{
+  background:var(--ink);
+  color:var(--paper);
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,'PingFang TC','Microsoft JhengHei',sans-serif;
+  -webkit-font-smoothing:antialiased;
+  min-height:100vh;
+  padding-bottom:64px;
+}
+
+.wrap{
+  max-width:640px;
+  margin:0 auto;
+  padding:20px 16px 40px;
+}
+
+/* ---------- Header ---------- */
+
+.topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:22px;
+}
+
+.brand{
+  display:flex;
+  flex-direction:column;
+}
+
+.brand .eyebrow{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11px;
+  letter-spacing:.18em;
+  color:var(--muted);
+  text-transform:uppercase;
+}
+
+.brand h1{
+  font-family:'Fraunces',serif;
+  font-weight:600;
+  font-size:26px;
+  margin:2px 0 0;
+  letter-spacing:-0.01em;
+}
+
+.sync-info{
+  margin-top:5px;
+  font-size:10px;
+  color:var(--muted);
+}
+
+.btn{
+  font-family:'Inter',sans-serif;
+  font-weight:600;
+  font-size:13.5px;
+  border:1px solid var(--line);
+  background:transparent;
+  color:var(--paper);
+  padding:9px 14px;
+  border-radius:999px;
+  cursor:pointer;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  transition:background .15s ease,transform .1s ease;
+}
+
+.btn:hover{
+  background:rgba(241,243,248,0.08);
+}
+
+.btn:active{
+  transform:scale(0.97);
+}
+
+.btn-primary{
+  background:var(--paper);
+  color:var(--ink);
+  border-color:var(--paper);
+}
+
+.btn-primary:hover{
+  background:#fff;
+}
+
+.btn-ghost{
+  border:none;
+  color:var(--muted);
+  padding:6px 8px;
+}
+
+.btn-danger{
+  color:#e57373;
+  border-color:rgba(229,115,115,0.4);
+}
+
+section{
+  margin-bottom:30px;
+}
+
+.section-label{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11.5px;
+  letter-spacing:.14em;
+  color:var(--muted);
+  text-transform:uppercase;
+  margin:0 0 10px 2px;
+}
+
+/* ---------- Punch card ---------- */
+
+.punch-card{
+  position:relative;
+  background:var(--paper);
+  color:var(--ink);
+  border-radius:var(--radius);
+  padding:26px 22px 22px;
+  display:flex;
+  align-items:stretch;
+  gap:18px;
+  box-shadow:0 18px 40px -18px rgba(0,0,0,0.5);
+}
+
+.punch-card::before,
+.punch-card::after{
+  content:'';
+  position:absolute;
+  left:14px;
+  right:14px;
+  height:14px;
+  background-image:radial-gradient(circle at 10px 7px,var(--ink) 4.5px,transparent 5.5px);
+  background-size:22px 14px;
+  background-repeat:repeat-x;
+  background-position:4px 0;
+}
+
+.punch-card::before{
+  top:-7px;
+}
+
+.punch-card::after{
+  bottom:-7px;
+  transform:rotate(180deg);
+}
+
+.punch-left{
+  flex:1 1 auto;
+  min-width:0;
+}
+
+.punch-left .weekday{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:12px;
+  letter-spacing:.1em;
+  color:var(--muted);
+  text-transform:uppercase;
+}
+
+.punch-left .datenum{
+  font-family:'Fraunces',serif;
+  font-weight:700;
+  font-size:44px;
+  line-height:1.05;
+  margin:2px 0 10px;
+}
+
+.punch-tag{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  font-size:12.5px;
+  font-weight:600;
+  padding:5px 10px;
+  border-radius:999px;
+  background:rgba(27,32,40,0.08);
+}
+
+.punch-divider{
+  width:1px;
+  border-left:2px dashed rgba(27,32,40,0.2);
+}
+
+.punch-right{
+  flex:1 1 auto;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  min-width:0;
+}
+
+.punch-right .code{
+  font-family:'IBM Plex Mono',monospace;
+  font-weight:600;
+  font-size:15px;
+  color:var(--muted);
+}
+
+.punch-right .time{
+  font-family:'IBM Plex Mono',monospace;
+  font-weight:600;
+  font-size:22px;
+  margin-top:4px;
+  letter-spacing:-0.02em;
+}
+
+.punch-right .note{
+  margin-top:8px;
+  font-size:12.5px;
+  color:var(--flag);
+  font-weight:600;
+}
+
+.punch-right .empty{
+  font-size:14px;
+  color:var(--muted);
+}
+
+.type-early .punch-tag{
+  background:rgba(224,169,109,0.2);
+  color:#8d5718;
+}
+
+.type-late .punch-tag{
+  background:rgba(122,142,184,0.22);
+  color:#2f4673;
+}
+
+.type-leave .punch-tag{
+  background:rgba(114,155,121,0.22);
+  color:#284f2e;
+}
+
+/* ---------- 7-day strip ---------- */
+
+.week-scroll{
+  display:flex;
+  gap:10px;
+  overflow-x:auto;
+  padding:2px 2px 6px;
+  scrollbar-width:none;
+}
+
+.week-scroll::-webkit-scrollbar{
+  display:none;
+}
+
+.day-chip{
+  flex:0 0 auto;
+  width:86px;
+  background:var(--ink-soft);
+  border-radius:12px;
+  padding:12px 10px;
+  border:1px solid var(--line);
+}
+
+.day-chip.today{
+  border-color:var(--paper);
+}
+
+.day-chip .dc-weekday{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10.5px;
+  color:var(--muted);
+  letter-spacing:.08em;
+}
+
+.day-chip .dc-date{
+  font-family:'Fraunces',serif;
+  font-size:20px;
+  font-weight:600;
+  margin:2px 0 8px;
+}
+
+.day-chip .dc-badge{
+  display:inline-block;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11px;
+  font-weight:600;
+  padding:3px 7px;
+  border-radius:6px;
+  margin-bottom:5px;
+}
+
+.day-chip .dc-time{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11px;
+  color:var(--muted);
+}
+
+.day-chip .dc-empty{
+  font-size:11.5px;
+  color:var(--muted);
+  padding-top:6px;
+}
+
+.badge-early{
+  background:var(--dawn-dim);
+  color:var(--dawn);
+}
+
+.badge-late{
+  background:var(--dusk-dim);
+  color:var(--dusk);
+}
+
+.badge-leave{
+  background:var(--rest-dim);
+  color:var(--rest);
+}
+
+/* ---------- Month calendar ---------- */
+
+.month-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:10px;
+}
+
+.month-head .mh-title{
+  font-family:'Fraunces',serif;
+  font-size:19px;
+  font-weight:600;
+}
+
+.month-nav{
+  display:flex;
+  align-items:center;
+  gap:4px;
+}
+
+.weekday-row{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:6px;
+  margin-bottom:6px;
+}
+
+.weekday-row span{
+  text-align:center;
+  font-size:11px;
+  color:var(--muted);
+  font-family:'IBM Plex Mono',monospace;
+}
+
+.month-grid{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:6px;
+}
+
+.day-cell{
+  aspect-ratio:1 / 1.02;
+  border-radius:10px;
+  background:var(--ink-soft);
+  border:1px solid var(--line);
+  padding:6px 5px;
+  cursor:pointer;
+  display:flex;
+  flex-direction:column;
+  gap:3px;
+  position:relative;
+  transition:background .12s ease,transform .08s ease;
+}
+
+.day-cell:hover{
+  background:#343d4f;
+}
+
+.day-cell:active{
+  transform:scale(0.96);
+}
+
+.day-cell.empty-cell{
+  background:transparent;
+  border-color:transparent;
+  cursor:default;
+}
+
+.day-cell.is-today{
+  box-shadow:inset 0 0 0 1.5px var(--paper);
+}
+
+.day-cell .num{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11.5px;
+  color:var(--muted);
+}
+
+.day-cell.is-today .num{
+  color:var(--paper);
+  font-weight:700;
+}
+
+.day-cell .chip{
+  font-size:10px;
+  font-weight:700;
+  font-family:'IBM Plex Mono',monospace;
+  padding:2px 4px;
+  border-radius:5px;
+  align-self:flex-start;
+  line-height:1.5;
+}
+
+.day-cell .mini-time{
+  font-size:9px;
+  color:var(--muted);
+  font-family:'IBM Plex Mono',monospace;
+}
+
+.day-cell .flag-dot{
+  position:absolute;
+  top:6px;
+  right:6px;
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:var(--flag);
+}
+
+/* ---------- Stats ---------- */
+
+.stats-card{
+  background:var(--ink-soft);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:18px;
+}
+
+.stats-top{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  margin-bottom:12px;
+}
+
+.stats-top .big{
+  font-family:'Fraunces',serif;
+  font-size:26px;
+  font-weight:600;
+}
+
+.stats-top .big span{
+  font-size:15px;
+  color:var(--muted);
+  font-weight:400;
+  font-family:'Inter',sans-serif;
+}
+
+.quota-row{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-bottom:10px;
+}
+
+.quota-pill{
+  flex:1 1 auto;
+  min-width:84px;
+  background:var(--ink);
+  border-radius:10px;
+  padding:9px 10px;
+  border:1px solid var(--line);
+}
+
+.quota-pill .ql-label{
+  font-size:11px;
+  color:var(--muted);
+}
+
+.quota-pill .ql-val{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:16px;
+  font-weight:600;
+  margin-top:2px;
+}
+
+.quota-pill.over .ql-val{
+  color:var(--flag);
+}
+
+.quota-pill.ok .ql-val{
+  color:var(--rest);
+}
+
+.extra-row{
+  display:flex;
+  gap:16px;
+  flex-wrap:wrap;
+  font-size:12.5px;
+  color:var(--muted);
+  margin-top:4px;
+}
+
+.extra-row b{
+  color:var(--paper);
+}
+
+.no-quota{
+  font-size:13px;
+  color:var(--muted);
+}
+
+/* ---------- Empty ---------- */
+
+.empty-state{
+  border:1px dashed var(--line);
+  border-radius:var(--radius);
+  padding:26px 18px;
+  text-align:center;
+  color:var(--muted);
+  font-size:14px;
+}
+
+.empty-state .btn{
+  margin-top:12px;
+}
+
+/* ---------- Modal ---------- */
+
+.overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(15,18,23,0.72);
+  backdrop-filter:blur(3px);
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  z-index:50;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .18s ease;
+}
+
+.overlay.show{
+  opacity:1;
+  pointer-events:auto;
+}
+
+.modal{
+  background:var(--ink-soft);
+  width:100%;
+  max-width:640px;
+  border-radius:18px 18px 0 0;
+  padding:20px 18px calc(20px + env(safe-area-inset-bottom));
+  max-height:86vh;
+  overflow-y:auto;
+  transform:translateY(16px);
+  transition:transform .18s ease;
+  border-top:1px solid var(--line);
+}
+
+.overlay.show .modal{
+  transform:translateY(0);
+}
+
+.modal h2{
+  font-family:'Fraunces',serif;
+  font-size:20px;
+  margin:0 0 4px;
+}
+
+.modal .sub{
+  font-size:12.5px;
+  color:var(--muted);
+  margin-bottom:16px;
+}
+
+.field{
+  margin-bottom:14px;
+}
+
+.field label{
+  display:block;
+  font-size:12.5px;
+  color:var(--muted);
+  margin-bottom:6px;
+}
+
+input[type=month],
+select,
+textarea{
+  width:100%;
+  background:var(--ink);
+  border:1px solid var(--line);
+  color:var(--paper);
+  border-radius:10px;
+  padding:10px 12px;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:13.5px;
+}
+
+textarea{
+  min-height:150px;
+  resize:vertical;
+  line-height:1.6;
+}
+
+select{
+  font-family:'Inter',sans-serif;
+}
+
+.hint-box{
+  background:var(--ink);
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:10px 12px;
+  font-size:12px;
+  color:var(--muted);
+  line-height:1.7;
+  margin-bottom:14px;
+}
+
+.hint-box code{
+  color:var(--paper);
+  background:rgba(241,243,248,0.08);
+  padding:1px 5px;
+  border-radius:4px;
+}
+
+.checkbox-row{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-bottom:14px;
+  font-size:13px;
+  color:var(--paper);
+}
+
+.checkbox-row input{
+  width:16px;
+  height:16px;
+}
+
+.preview-box{
+  background:var(--ink);
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:10px 12px;
+  max-height:140px;
+  overflow-y:auto;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:12px;
+  margin-bottom:14px;
+}
+
+.preview-box .pv-line{
+  padding:2px 0;
+  color:var(--paper);
+}
+
+.preview-box .pv-err{
+  color:var(--flag);
+}
+
+.modal-actions{
+  display:flex;
+  gap:10px;
+  margin-top:6px;
+}
+
+.modal-actions .btn{
+  flex:1;
+  justify-content:center;
+}
+
+.modal-close{
+  position:absolute;
+  top:14px;
+  right:14px;
+}
+
+.modal-wrap{
+  position:relative;
+}
+
+.toast{
+  position:fixed;
+  bottom:18px;
+  left:50%;
+  transform:translateX(-50%);
+  background:var(--paper);
+  color:var(--ink);
+  padding:10px 18px;
+  border-radius:999px;
+  font-size:13.5px;
+  font-weight:600;
+  box-shadow:0 10px 30px -10px rgba(0,0,0,0.5);
+  z-index:80;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .2s ease,transform .2s ease;
+  max-width:90%;
+  text-align:center;
+}
+
+.toast.show{
+  opacity:1;
+  transform:translateX(-50%) translateY(-6px);
+}
+
+@media(max-width:380px){
   .punch-left .datenum{
-    font-family:'Fraunces', serif; font-weight:700; font-size:44px; line-height:1.05; margin:2px 0 10px;
+    font-size:36px;
   }
-  .punch-tag{
-    display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:600;
-    padding:5px 10px; border-radius:999px; background: rgba(27,32,40,0.08);
-  }
-  .punch-divider{ width:1px; border-left: 2px dashed rgba(27,32,40,0.2); }
-  .punch-right{ flex: 1 1 auto; display:flex; flex-direction:column; justify-content:center; min-width:0; }
-  .punch-right .code{ font-family:'IBM Plex Mono', monospace; font-weight:600; font-size:15px; color:var(--muted); }
+
   .punch-right .time{
-    font-family:'IBM Plex Mono', monospace; font-weight:600; font-size: 22px; margin-top:4px;
-    letter-spacing:-0.02em;
+    font-size:19px;
   }
-  .punch-right .note{ margin-top:8px; font-size:12.5px; color:var(--flag); font-weight:600; }
-  .punch-right .empty{ font-size:14px; color:var(--muted); }
-
-  .type-early .punch-tag{ background: rgba(224,169,109,0.2); color:#8d5718; }
-  .type-late .punch-tag{ background: rgba(122,142,184,0.22); color:#2f4673; }
-  .type-leave .punch-tag{ background: rgba(114,155,121,0.22); color:#284f2e; }
-
-  /* ---------- 7-day strip ---------- */
-  .week-scroll{
-    display:flex; gap:10px; overflow-x:auto; padding: 2px 2px 6px;
-    scrollbar-width:none;
-  }
-  .week-scroll::-webkit-scrollbar{ display:none; }
-  .day-chip{
-    flex: 0 0 auto; width: 86px; background: var(--ink-soft); border-radius: 12px;
-    padding: 12px 10px; border:1px solid var(--line);
-  }
-  .day-chip.today{ border-color: var(--paper); }
-  .day-chip .dc-weekday{ font-family:'IBM Plex Mono', monospace; font-size:10.5px; color:var(--muted); letter-spacing:.08em; }
-  .day-chip .dc-date{ font-family:'Fraunces', serif; font-size:20px; font-weight:600; margin:2px 0 8px; }
-  .day-chip .dc-badge{
-    display:inline-block; font-family:'IBM Plex Mono', monospace; font-size:11px; font-weight:600;
-    padding: 3px 7px; border-radius:6px; margin-bottom:5px;
-  }
-  .day-chip .dc-time{ font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--muted); }
-  .day-chip .dc-empty{ font-size:11.5px; color:var(--muted); padding-top: 6px; }
-
-  .badge-early{ background: var(--dawn-dim); color: var(--dawn); }
-  .badge-late{ background: var(--dusk-dim); color: var(--dusk); }
-  .badge-leave{ background: var(--rest-dim); color: var(--rest); }
-
-  /* ---------- Month calendar ---------- */
-  .month-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
-  .month-head .mh-title{ font-family:'Fraunces', serif; font-size: 19px; font-weight:600; }
-  .month-nav{ display:flex; align-items:center; gap:4px; }
-  .weekday-row{ display:grid; grid-template-columns: repeat(7,1fr); gap:6px; margin-bottom:6px; }
-  .weekday-row span{ text-align:center; font-size:11px; color:var(--muted); font-family:'IBM Plex Mono', monospace; }
-  .month-grid{ display:grid; grid-template-columns: repeat(7,1fr); gap:6px; }
-  .day-cell{
-    aspect-ratio: 1 / 1.02; border-radius:10px; background: var(--ink-soft);
-    border:1px solid var(--line); padding: 6px 5px; cursor:pointer;
-    display:flex; flex-direction:column; gap:3px; position:relative;
-    transition: background .12s ease, transform .08s ease;
-  }
-  .day-cell:hover{ background:#343d4f; }
-  .day-cell:active{ transform: scale(0.96); }
-  .day-cell.empty-cell{ background:transparent; border-color:transparent; cursor:default; }
-  .day-cell.is-today{ box-shadow: inset 0 0 0 1.5px var(--paper); }
-  .day-cell .num{ font-family:'IBM Plex Mono', monospace; font-size:11.5px; color: var(--muted); }
-  .day-cell.is-today .num{ color: var(--paper); font-weight:700; }
-  .day-cell .chip{
-    font-size:10px; font-weight:700; font-family:'IBM Plex Mono', monospace;
-    padding:2px 4px; border-radius:5px; align-self:flex-start; line-height:1.5;
-  }
-  .day-cell .mini-time{ font-size:9px; color:var(--muted); font-family:'IBM Plex Mono', monospace; }
-  .day-cell .flag-dot{ position:absolute; top:6px; right:6px; width:6px; height:6px; border-radius:50%; background:var(--flag); }
-
-  /* ---------- Stats ---------- */
-  .stats-card{ background: var(--ink-soft); border:1px solid var(--line); border-radius: var(--radius); padding:18px; }
-  .stats-top{ display:flex; align-items:baseline; justify-content:space-between; margin-bottom:12px; }
-  .stats-top .big{ font-family:'Fraunces', serif; font-size:26px; font-weight:600; }
-  .stats-top .big span{ font-size:15px; color:var(--muted); font-weight:400; font-family:'Inter', sans-serif; }
-  .quota-row{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom: 10px; }
-  .quota-pill{
-    flex:1 1 auto; min-width: 84px; background: var(--ink); border-radius:10px; padding:9px 10px;
-    border:1px solid var(--line);
-  }
-  .quota-pill .ql-label{ font-size:11px; color:var(--muted); }
-  .quota-pill .ql-val{ font-family:'IBM Plex Mono', monospace; font-size:16px; font-weight:600; margin-top:2px; }
-  .quota-pill.over .ql-val{ color:var(--flag); }
-  .quota-pill.ok .ql-val{ color:var(--rest); }
-  .extra-row{ display:flex; gap:16px; flex-wrap:wrap; font-size:12.5px; color:var(--muted); margin-top:4px; }
-  .extra-row b{ color: var(--paper); }
-  .no-quota{ font-size:13px; color:var(--muted); }
-
-  /* ---------- Empty state ---------- */
-  .empty-state{
-    border:1px dashed var(--line); border-radius: var(--radius); padding: 26px 18px;
-    text-align:center; color:var(--muted); font-size:14px;
-  }
-  .empty-state .btn{ margin-top:12px; }
-
-  /* ---------- Modal ---------- */
-  .overlay{
-    position:fixed; inset:0; background: rgba(15,18,23,0.72); backdrop-filter: blur(3px);
-    display:flex; align-items:flex-end; justify-content:center; z-index: 50;
-    opacity:0; pointer-events:none; transition: opacity .18s ease;
-  }
-  .overlay.show{ opacity:1; pointer-events:auto; }
-  .modal{
-    background: var(--ink-soft); width:100%; max-width: 640px; border-radius: 18px 18px 0 0;
-    padding: 20px 18px calc(20px + env(safe-area-inset-bottom));
-    max-height: 86vh; overflow-y:auto; transform: translateY(16px); transition: transform .18s ease;
-    border-top:1px solid var(--line);
-  }
-  .overlay.show .modal{ transform: translateY(0); }
-  .modal h2{ font-family:'Fraunces', serif; font-size:20px; margin:0 0 4px; }
-  .modal .sub{ font-size:12.5px; color:var(--muted); margin-bottom:16px; }
-  .field{ margin-bottom:14px; }
-  .field label{ display:block; font-size:12.5px; color:var(--muted); margin-bottom:6px; }
-  input[type=month], select, textarea{
-    width:100%; background: var(--ink); border:1px solid var(--line); color: var(--paper);
-    border-radius:10px; padding:10px 12px; font-family:'IBM Plex Mono', monospace; font-size:13.5px;
-  }
-  textarea{ min-height: 150px; resize:vertical; line-height:1.6; }
-  select{ font-family:'Inter',sans-serif; }
-  .hint-box{
-    background: var(--ink); border:1px solid var(--line); border-radius:10px; padding:10px 12px;
-    font-size:12px; color:var(--muted); line-height:1.7; margin-bottom:14px;
-  }
-  .hint-box code{ color: var(--paper); background: rgba(241,243,248,0.08); padding:1px 5px; border-radius:4px; }
-  .checkbox-row{ display:flex; align-items:center; gap:8px; margin-bottom:14px; font-size:13px; color:var(--paper); }
-  .checkbox-row input{ width:16px; height:16px; }
-  .preview-box{
-    background: var(--ink); border:1px solid var(--line); border-radius:10px; padding:10px 12px;
-    max-height:140px; overflow-y:auto; font-family:'IBM Plex Mono', monospace; font-size:12px; margin-bottom:14px;
-  }
-  .preview-box .pv-line{ padding:2px 0; color: var(--paper); }
-  .preview-box .pv-err{ color:var(--flag); }
-  .modal-actions{ display:flex; gap:10px; margin-top: 6px; }
-  .modal-actions .btn{ flex:1; justify-content:center; }
-  .modal-close{ position:absolute; top:14px; right:14px; }
-  .modal-wrap{ position:relative; }
-
-  .toast{
-    position:fixed; bottom: 18px; left:50%; transform: translateX(-50%);
-    background: var(--paper); color: var(--ink); padding:10px 18px; border-radius:999px;
-    font-size:13.5px; font-weight:600; box-shadow:0 10px 30px -10px rgba(0,0,0,0.5);
-    z-index:80; opacity:0; pointer-events:none; transition: opacity .2s ease, transform .2s ease;
-  }
-  .toast.show{ opacity:1; transform: translateX(-50%) translateY(-6px); }
-
-  @media (max-width:380px){
-    .punch-left .datenum{ font-size:36px; }
-    .punch-right .time{ font-size:19px; }
-  }
+}
 </style>
 </head>
+
 <body>
+
 <div class="wrap">
 
   <div class="topbar">
+
     <div class="brand">
       <span class="eyebrow">Shift Punch Card</span>
       <h1>我的班表</h1>
+      <div class="sync-info" id="syncInfo">同步資料中…</div>
     </div>
-    <button class="btn btn-primary" id="openBatchBtn">＋ 批次輸入</button>
+
+    <button class="btn btn-primary" id="openBatchBtn">
+      ＋ 批次輸入
+    </button>
+
   </div>
 
   <section>
@@ -267,519 +779,2595 @@
   </section>
 
   <section>
+
     <div class="month-head">
+
       <div class="mh-title" id="monthTitle"></div>
+
       <div class="month-nav">
         <button class="btn btn-ghost" id="prevMonthBtn">‹</button>
-        <button class="btn btn-ghost" id="todayMonthBtn" style="font-size:12px;">本月</button>
+        <button class="btn btn-ghost" id="todayMonthBtn" style="font-size:12px;">
+          本月
+        </button>
         <button class="btn btn-ghost" id="nextMonthBtn">›</button>
       </div>
+
     </div>
-    <div class="weekday-row"><span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span></div>
+
+    <div class="weekday-row">
+      <span>日</span>
+      <span>一</span>
+      <span>二</span>
+      <span>三</span>
+      <span>四</span>
+      <span>五</span>
+      <span>六</span>
+    </div>
+
     <div class="month-grid" id="monthGrid"></div>
+
   </section>
 
   <section id="statsSection">
+
     <div class="section-label">本月休假統計</div>
+
     <div class="stats-card" id="statsCard"></div>
+
   </section>
 
 </div>
 
+
 <div class="toast" id="toast"></div>
 
+
 <!-- Batch input modal -->
+
 <div class="overlay" id="batchOverlay">
+
   <div class="modal">
+
     <div class="modal-wrap">
-      <button class="btn btn-ghost modal-close" id="closeBatchBtn">✕</button>
+
+      <button class="btn btn-ghost modal-close" id="closeBatchBtn">
+        ✕
+      </button>
+
       <h2>批次輸入本月班表</h2>
-      <div class="sub">選擇月份，貼上班表清單即可一次輸入</div>
+
+      <div class="sub">
+        選擇月份，貼上班表清單即可一次輸入
+      </div>
 
       <div class="field">
+
         <label>選擇月份</label>
+
         <input type="month" id="batchMonth">
+
       </div>
 
       <div class="hint-box">
-        每行一筆，<code>日期 代號</code>，以空白分隔。支援：<br>
-        <code>1 Q002</code> 單日 ／ <code>1-5 Q002</code> 連續區間 ／ <code>2026-01-01 Q002</code> 完整日期<br>
-        代號可參考：早班 Q002 Q003 Q004 Q005 Q006 Q007 晚班 Q013 Q014 Q015 Q016 Q017 Q021 休假 Z02 Z01 Z03 00001 00030 抵
+
+        每行一筆，<code>日期 代號</code>，以空白分隔。支援：
+
+        <br>
+
+        <code>1 Q002</code> 單日 ／
+        <code>1-5 Q002</code> 連續區間 ／
+        <code>2026-01-01 Q002</code> 完整日期
+
+        <br>
+
+        代號可參考：
+
+        早班 Q002 Q003 Q004 Q005 Q006 Q007
+
+        晚班 Q013 Q014 Q015 Q016 Q017 Q021
+
+        休假 Z02 Z01 Z03 00001 00030 抵
+
       </div>
 
       <div class="field">
+
         <label>貼上班表</label>
-        <textarea id="batchText" placeholder="1 Q002&#10;2 Q002&#10;3 Z01&#10;4-5 Q013&#10;6 00001"></textarea>
+
+        <textarea
+          id="batchText"
+          placeholder="1 Q002&#10;2 Q002&#10;3 Z01&#10;4-5 Q013&#10;6 00001"
+        ></textarea>
+
       </div>
 
       <label class="checkbox-row">
+
         <input type="checkbox" id="clearMonthFirst">
+
         套用前先清空本月已輸入的班表
+
       </label>
 
       <div class="field" id="previewWrap" style="display:none;">
+
         <label>預覽</label>
+
         <div class="preview-box" id="previewBox"></div>
+
       </div>
 
       <div class="modal-actions">
-        <button class="btn" id="previewBtn" style="flex:1; justify-content:center;">預覽</button>
-        <button class="btn btn-primary" id="applyBatchBtn" style="flex:1;">套用並儲存</button>
+
+        <button
+          class="btn"
+          id="previewBtn"
+          style="flex:1;justify-content:center;"
+        >
+          預覽
+        </button>
+
+        <button
+          class="btn btn-primary"
+          id="applyBatchBtn"
+          style="flex:1;"
+        >
+          套用並儲存
+        </button>
+
       </div>
+
     </div>
+
   </div>
+
 </div>
+
 
 <!-- Single day edit modal -->
+
 <div class="overlay" id="dayOverlay">
+
   <div class="modal">
+
     <div class="modal-wrap">
-      <button class="btn btn-ghost modal-close" id="closeDayBtn">✕</button>
+
+      <button class="btn btn-ghost modal-close" id="closeDayBtn">
+        ✕
+      </button>
+
       <h2 id="dayModalTitle">編輯班表</h2>
-      <div class="sub">選擇代號後立即儲存</div>
+
+      <div class="sub">
+        選擇代號後立即儲存
+      </div>
+
       <div class="field">
+
         <label>班別代號</label>
+
         <select id="dayCodeSelect"></select>
+
       </div>
+
       <div class="modal-actions">
-        <button class="btn btn-danger" id="clearDayBtn" style="flex:1; justify-content:center;">清除此日</button>
-        <button class="btn btn-primary" id="saveDayBtn" style="flex:1;">儲存</button>
+
+        <button
+          class="btn btn-danger"
+          id="clearDayBtn"
+          style="flex:1;justify-content:center;"
+        >
+          清除此日
+        </button>
+
+        <button
+          class="btn btn-primary"
+          id="saveDayBtn"
+          style="flex:1;"
+        >
+          儲存
+        </button>
+
       </div>
+
     </div>
+
   </div>
+
 </div>
 
+
 <script>
-// ==================== 雲端同步設定 (JSONBin) ====================
+
+/* =========================================================
+   雲端同步設定
+   ========================================================= */
+
 const CONFIG = {
+
   BIN_ID: '6a8ee77cda38895dfe133f1b',
-  API_KEY: '$2a$10$R9cVF01Xj9aDQmsVpgUTHuMwmQk1daAwUqrnOdwXBacpv.0wvcQB.'
+
+  // ⚠️ 請換成你重新產生的新 JSONBin API Key
+  API_KEY: '$2a$10$FudnSrQnUHUoN/4Hp0.1W.QnhE4ToyA7dOSPhqDlUPfehnGs6UtC2'
+
 };
+
+
+/* =========================================================
+   班別設定
+   ========================================================= */
 
 const CODES = {
-  Q002:{type:'early', time:'08:00–17:00', note:''},
-  Q003:{type:'early', time:'08:30–17:30', note:''},
-  Q004:{type:'early', time:'09:00–18:00', note:'盤點／大盤'},
-  Q005:{type:'early', time:'09:30–18:30', note:''},
-  Q006:{type:'early', time:'10:00–19:00', note:''},
-  Q007:{type:'early', time:'10:30–19:30', note:''},
-  Q013:{type:'late', time:'13:00–22:00', note:''},
-  Q014:{type:'late', time:'13:30–22:30', note:'月底盤點'},
-  Q015:{type:'late', time:'14:00–23:00', note:''},
-  Q016:{type:'late', time:'14:30–23:30', note:''},
-  Q017:{type:'late', time:'15:00–24:00', note:'進、撤檔'},
-  Q021:{type:'late', time:'17:00–02:00', note:'進、撤檔'},
-  Z02:{type:'leave', label:'例假', category:'例假'},
-  Z01:{type:'leave', label:'休假日', category:'休息'},
-  Z03:{type:'leave', label:'國定假日', category:'國定'},
-  '00001':{type:'leave', label:'特休', category:'特休'},
-  '00030':{type:'leave', label:'生日假', category:'生日'},
-  '抵':{type:'leave', label:'抵休', category:'抵休'}
+
+  Q002:{
+    type:'early',
+    time:'08:00–17:00',
+    note:''
+  },
+
+  Q003:{
+    type:'early',
+    time:'08:30–17:30',
+    note:''
+  },
+
+  Q004:{
+    type:'early',
+    time:'09:00–18:00',
+    note:'盤點／大盤'
+  },
+
+  Q005:{
+    type:'early',
+    time:'09:30–18:30',
+    note:''
+  },
+
+  Q006:{
+    type:'early',
+    time:'10:00–19:00',
+    note:''
+  },
+
+  Q007:{
+    type:'early',
+    time:'10:30–19:30',
+    note:''
+  },
+
+  Q013:{
+    type:'late',
+    time:'13:00–22:00',
+    note:''
+  },
+
+  Q014:{
+    type:'late',
+    time:'13:30–22:30',
+    note:'月底盤點'
+  },
+
+  Q015:{
+    type:'late',
+    time:'14:00–23:00',
+    note:''
+  },
+
+  Q016:{
+    type:'late',
+    time:'14:30–23:30',
+    note:''
+  },
+
+  Q017:{
+    type:'late',
+    time:'15:00–24:00',
+    note:'進、撤檔'
+  },
+
+  Q021:{
+    type:'late',
+    time:'17:00–02:00',
+    note:'進、撤檔'
+  },
+
+  Z02:{
+    type:'leave',
+    label:'例假',
+    category:'例假'
+  },
+
+  Z01:{
+    type:'leave',
+    label:'休假日',
+    category:'休息'
+  },
+
+  Z03:{
+    type:'leave',
+    label:'國定假日',
+    category:'國定'
+  },
+
+  '00001':{
+    type:'leave',
+    label:'特休',
+    category:'特休'
+  },
+
+  '00030':{
+    type:'leave',
+    label:'生日假',
+    category:'生日'
+  },
+
+  '抵':{
+    type:'leave',
+    label:'抵休',
+    category:'抵休'
+  }
+
 };
+
+
+/* =========================================================
+   每月休假規則
+   ========================================================= */
 
 const MONTH_QUOTA = {
-  1:{total:12, 例假:5, 休息:5, 國定:2},
-  2:{total:11, 例假:4, 休息:4, 國定:3},
-  3:{total:10, 例假:4, 休息:4, 國定:2},
-  4:{total:11, 例假:4, 休息:5, 國定:2},
-  5:{total:10, 例假:5, 休息:4, 國定:1},
-  6:{total:9,  例假:4, 休息:4, 國定:1},
-  7:{total:10, 例假:5, 休息:5, 國定:0},
-  8:{total:10, 例假:4, 休息:4, 國定:2},
-  9:{total:9,  例假:4, 休息:4, 國定:1},
-  10:{total:10, 例假:5, 休息:4, 國定:1},
-  11:{total:9,  例假:4, 休息:5, 國定:0},
-  12:{total:9,  例假:4, 休息:4, 國定:1}
+
+  1:{
+    total:12,
+    例假:5,
+    休息:5,
+    國定:2
+  },
+
+  2:{
+    total:11,
+    例假:4,
+    休息:4,
+    國定:3
+  },
+
+  3:{
+    total:10,
+    例假:4,
+    休息:4,
+    國定:2
+  },
+
+  4:{
+    total:11,
+    例假:4,
+    休息:5,
+    國定:2
+  },
+
+  5:{
+    total:10,
+    例假:5,
+    休息:4,
+    國定:1
+  },
+
+  6:{
+    total:9,
+    例假:4,
+    休息:4,
+    國定:1
+  },
+
+  7:{
+    total:10,
+    例假:5,
+    休息:5,
+    國定:0
+  },
+
+  8:{
+    total:10,
+    例假:4,
+    休息:4,
+    國定:2
+  },
+
+  9:{
+    total:9,
+    例假:4,
+    休息:4,
+    國定:1
+  },
+
+  10:{
+    total:10,
+    例假:5,
+    休息:4,
+    國定:1
+  },
+
+  11:{
+    total:9,
+    例假:4,
+    休息:5,
+    國定:0
+  },
+
+  12:{
+    total:9,
+    例假:4,
+    休息:4,
+    國定:1
+  }
+
 };
+
 const QUOTA_YEAR = 2026;
 
-const WEEKDAYS_ZH = ['週日','週一','週二','週三','週四','週五','週六'];
-const WEEKDAYS_SHORT = ['日','一','二','三','四','五','六'];
+const WEEKDAYS_ZH = [
+  '週日',
+  '週一',
+  '週二',
+  '週三',
+  '週四',
+  '週五',
+  '週六'
+];
 
-let shifts = {};       // { 'YYYY-MM-DD': code }
-let viewYear, viewMonth; 
+const WEEKDAYS_SHORT = [
+  '日',
+  '一',
+  '二',
+  '三',
+  '四',
+  '五',
+  '六'
+];
+
+
+/* =========================================================
+   全域資料
+   ========================================================= */
+
+let shifts = {};
+
+let viewYear;
+let viewMonth;
+
 const todayObj = new Date();
-const todayStr = fmtDate(todayObj.getFullYear(), todayObj.getMonth()+1, todayObj.getDate());
 
-function pad(n){ return String(n).padStart(2,'0'); }
-function fmtDate(y,m,d){ return `${y}-${pad(m)}-${pad(d)}`; }
-function addDays(dateStr, n){
-  const [y,m,d] = dateStr.split('-').map(Number);
-  const dt = new Date(y, m-1, d);
-  dt.setDate(dt.getDate()+n);
-  return fmtDate(dt.getFullYear(), dt.getMonth()+1, dt.getDate());
+const todayStr = fmtDate(
+  todayObj.getFullYear(),
+  todayObj.getMonth()+1,
+  todayObj.getDate()
+);
+
+
+/* =========================================================
+   基本工具
+   ========================================================= */
+
+function pad(n){
+
+  return String(n).padStart(2,'0');
+
 }
+
+
+function fmtDate(y,m,d){
+
+  return `${y}-${pad(m)}-${pad(d)}`;
+
+}
+
+
+function addDays(dateStr,n){
+
+  const [
+    y,
+    m,
+    d
+  ] = dateStr.split('-').map(Number);
+
+  const dt = new Date(
+    y,
+    m-1,
+    d
+  );
+
+  dt.setDate(
+    dt.getDate()+n
+  );
+
+  return fmtDate(
+    dt.getFullYear(),
+    dt.getMonth()+1,
+    dt.getDate()
+  );
+
+}
+
+
 function weekdayOf(dateStr){
-  const [y,m,d] = dateStr.split('-').map(Number);
-  return new Date(y, m-1, d).getDay();
+
+  const [
+    y,
+    m,
+    d
+  ] = dateStr.split('-').map(Number);
+
+  return new Date(
+    y,
+    m-1,
+    d
+  ).getDay();
+
 }
-function daysInMonth(y,m){ return new Date(y, m, 0).getDate(); }
+
+
+function daysInMonth(y,m){
+
+  return new Date(
+    y,
+    m,
+    0
+  ).getDate();
+
+}
+
+
+/* =========================================================
+   Toast
+   ========================================================= */
 
 function showToast(msg){
-  const t = document.getElementById('toast');
+
+  const t =
+    document.getElementById('toast');
+
   t.textContent = msg;
+
   t.classList.add('show');
-  clearTimeout(showToast._tm);
-  showToast._tm = setTimeout(()=> t.classList.remove('show'), 2200);
+
+  clearTimeout(
+    showToast._tm
+  );
+
+  showToast._tm =
+    setTimeout(
+      ()=>{
+        t.classList.remove('show');
+      },
+      2600
+    );
+
 }
 
-/* ---------------- 雲端資料庫同步核心 ---------------- */
-async function loadData(){
-  try{
-    const res = await fetch(`https://api.jsonbin.io/v3/b/${CONFIG.BIN_ID}/latest`, {
-      headers: { 'X-Master-Key': CONFIG.API_KEY }
-    });
-    if(!res.ok) throw new Error('雲端讀取失敗');
-    const data = await res.json();
-    shifts = data.record.shifts || {};
-  }catch(e){
-    console.error(e);
-    showToast('雲端讀取失敗，顯示本地快照');
-    const local = localStorage.getItem('shift-data-cache');
-    if(local) shifts = JSON.parse(local);
+
+/* =========================================================
+   同步狀態
+   ========================================================= */
+
+function updateSyncInfo(text){
+
+  const el =
+    document.getElementById('syncInfo');
+
+  if(el){
+
+    el.textContent = text;
+
   }
+
 }
+
+
+/* =========================================================
+   雲端讀取
+   ========================================================= */
+
+async function loadData(){
+
+  updateSyncInfo(
+    '正在讀取雲端資料…'
+  );
+
+  try{
+
+    const res = await fetch(
+
+      `https://api.jsonbin.io/v3/b/${CONFIG.BIN_ID}/latest`,
+
+      {
+        method:'GET',
+
+        headers:{
+          'X-Master-Key':
+            CONFIG.API_KEY
+        },
+
+        cache:'no-store'
+
+      }
+
+    );
+
+
+    if(!res.ok){
+
+      const errorText =
+        await res.text();
+
+      throw new Error(
+        `HTTP ${res.status} ${errorText}`
+      );
+
+    }
+
+
+    const data =
+      await res.json();
+
+
+    shifts =
+      data.record?.shifts || {};
+
+
+    /*
+
+      將成功取得的雲端資料
+      同時存成本機快取。
+
+      注意：
+      這只是備援，不是跨裝置同步。
+
+    */
+
+    localStorage.setItem(
+
+      'shift-data-cache',
+
+      JSON.stringify(shifts)
+
+    );
+
+
+    const updatedAt =
+      data.record?.updatedAt;
+
+
+    if(updatedAt){
+
+      const date =
+        new Date(updatedAt);
+
+      updateSyncInfo(
+        '最後同步：' +
+        date.toLocaleString(
+          'zh-TW',
+          {
+            month:'numeric',
+            day:'numeric',
+            hour:'2-digit',
+            minute:'2-digit'
+          }
+        )
+      );
+
+    }else{
+
+      updateSyncInfo(
+        '已從雲端同步'
+      );
+
+    }
+
+
+    return true;
+
+
+  }catch(e){
+
+    console.error(
+      'JSONBin 讀取失敗：',
+      e
+    );
+
+
+    /*
+
+      如果雲端失敗，
+      嘗試使用這台裝置之前留下的快取。
+
+    */
+
+    const local =
+      localStorage.getItem(
+        'shift-data-cache'
+      );
+
+
+    if(local){
+
+      try{
+
+        shifts =
+          JSON.parse(local);
+
+        updateSyncInfo(
+          '雲端讀取失敗 · 使用本機快取'
+        );
+
+        showToast(
+          '雲端讀取失敗，使用本機快取'
+        );
+
+        return false;
+
+      }catch(parseError){
+
+        console.error(
+          '本機資料解析失敗',
+          parseError
+        );
+
+      }
+
+    }
+
+
+    shifts = {};
+
+    updateSyncInfo(
+      '無法取得雲端資料'
+    );
+
+    showToast(
+      '無法讀取雲端班表'
+    );
+
+    return false;
+
+  }
+
+}
+
+
+/* =========================================================
+   雲端儲存
+   ========================================================= */
 
 async function saveData(){
-  localStorage.setItem('shift-data-cache', JSON.stringify(shifts));
+
+  /*
+
+    先保存本機快取。
+
+    即使雲端暫時失敗，
+    目前裝置仍然不會立即遺失資料。
+
+  */
+
+  localStorage.setItem(
+
+    'shift-data-cache',
+
+    JSON.stringify(shifts)
+
+  );
+
+
+  updateSyncInfo(
+    '正在同步雲端…'
+  );
+
+
   try{
-    const res = await fetch(`https://api.jsonbin.io/v3/b/${CONFIG.BIN_ID}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Master-Key': CONFIG.API_KEY
-      },
-      body: JSON.stringify({ shifts })
-    });
-    if(!res.ok) throw new Error('同步失敗');
+
+    const res = await fetch(
+
+      `https://api.jsonbin.io/v3/b/${CONFIG.BIN_ID}`,
+
+      {
+
+        method:'PUT',
+
+        headers:{
+
+          'Content-Type':
+            'application/json',
+
+          'X-Master-Key':
+            CONFIG.API_KEY
+
+        },
+
+        body:JSON.stringify({
+
+          shifts:shifts,
+
+          updatedAt:
+            new Date().toISOString()
+
+        })
+
+      }
+
+    );
+
+
+    const responseText =
+      await res.text();
+
+
+    if(!res.ok){
+
+      throw new Error(
+        `HTTP ${res.status}: ${responseText}`
+      );
+
+    }
+
+
+    console.log(
+      'JSONBin 同步成功',
+      responseText
+    );
+
+
+    updateSyncInfo(
+      '剛剛已同步'
+    );
+
+
+    return true;
+
+
   }catch(e){
-    console.error(e);
-    showToast('雲端同步失敗，請檢查網路');
+
+    console.error(
+      'JSONBin 同步失敗：',
+      e
+    );
+
+
+    updateSyncInfo(
+      '雲端同步失敗'
+    );
+
+
+    return false;
+
   }
+
 }
 
-/* ---------------- Rendering Functions ---------------- */
+
+/* =========================================================
+   今日
+   ========================================================= */
+
 function renderToday(){
-  const el = document.getElementById('todayCard');
-  const code = shifts[todayStr];
-  const [y,m,d] = todayStr.split('-').map(Number);
-  const wd = WEEKDAYS_ZH[weekdayOf(todayStr)];
+
+  const el =
+    document.getElementById(
+      'todayCard'
+    );
+
+
+  const code =
+    shifts[todayStr];
+
+
+  const [
+    y,
+    m,
+    d
+  ] = todayStr.split('-').map(Number);
+
+
+  const wd =
+    WEEKDAYS_ZH[
+      weekdayOf(todayStr)
+    ];
+
 
   let typeClass = '';
-  let rightHtml = '<div class="empty">今日尚未排班</div>';
+
+  let rightHtml =
+    '<div class="empty">今日尚未排班</div>';
+
   let tagHtml = '';
 
+
   if(code && CODES[code]){
-    const info = CODES[code];
-    typeClass = 'type-'+info.type;
+
+    const info =
+      CODES[code];
+
+
+    typeClass =
+      'type-' + info.type;
+
+
     if(info.type === 'leave'){
-      tagHtml = `<span class="punch-tag">${info.label}</span>`;
-      rightHtml = `<div class="code">${code}</div><div class="time">${info.label}</div>`;
-    } else {
-      tagHtml = `<span class="punch-tag">${info.type==='early' ? '早班' : '晚班'}</span>`;
-      rightHtml = `<div class="code">${code}</div><div class="time">${info.time}</div>` +
-                  (info.note ? `<div class="note">＃ ${info.note}</div>` : '');
+
+      tagHtml =
+        `<span class="punch-tag">${info.label}</span>`;
+
+
+      rightHtml =
+
+        `<div class="code">${code}</div>` +
+
+        `<div class="time">${info.label}</div>`;
+
+    }else{
+
+      tagHtml =
+
+        `<span class="punch-tag">${
+          info.type === 'early'
+            ? '早班'
+            : '晚班'
+        }</span>`;
+
+
+      rightHtml =
+
+        `<div class="code">${code}</div>` +
+
+        `<div class="time">${info.time}</div>` +
+
+        (
+          info.note
+            ? `<div class="note">＃ ${info.note}</div>`
+            : ''
+        );
+
     }
+
   }
+
 
   el.innerHTML = `
+
     <div class="punch-card ${typeClass}">
+
       <div class="punch-left">
-        <div class="weekday">${wd}</div>
-        <div class="datenum">${m}/${d}</div>
+
+        <div class="weekday">
+          ${wd}
+        </div>
+
+        <div class="datenum">
+          ${m}/${d}
+        </div>
+
         ${tagHtml}
+
       </div>
+
       <div class="punch-divider"></div>
-      <div class="punch-right">${rightHtml}</div>
-    </div>`;
+
+      <div class="punch-right">
+
+        ${rightHtml}
+
+      </div>
+
+    </div>
+
+  `;
+
 }
+
+
+/* =========================================================
+   近 7 日
+   ========================================================= */
 
 function renderWeek(){
-  const el = document.getElementById('weekStrip');
+
+  const el =
+    document.getElementById(
+      'weekStrip'
+    );
+
+
   let html = '';
+
+
   for(let i=0;i<7;i++){
-    const dateStr = addDays(todayStr, i);
-    const [y,m,d] = dateStr.split('-').map(Number);
-    const wd = WEEKDAYS_SHORT[weekdayOf(dateStr)];
-    const code = shifts[dateStr];
-    const isToday = dateStr === todayStr;
-    let inner = `<div class="dc-empty">未排班</div>`;
+
+    const dateStr =
+      addDays(
+        todayStr,
+        i
+      );
+
+
+    const [
+      y,
+      m,
+      d
+    ] = dateStr.split('-').map(Number);
+
+
+    const wd =
+      WEEKDAYS_SHORT[
+        weekdayOf(dateStr)
+      ];
+
+
+    const code =
+      shifts[dateStr];
+
+
+    const isToday =
+      dateStr === todayStr;
+
+
+    let inner =
+      `<div class="dc-empty">未排班</div>`;
+
+
     if(code && CODES[code]){
-      const info = CODES[code];
-      const badgeClass = info.type==='early' ? 'badge-early' : (info.type==='late' ? 'badge-late' : 'badge-leave');
-      const badgeText = info.type==='leave' ? info.label : code;
-      const timeText = info.type==='leave' ? '' : `<div class="dc-time">${info.time.split('–')[0]}起</div>`;
-      inner = `<span class="dc-badge ${badgeClass}">${badgeText}</span>${timeText}`;
+
+      const info =
+        CODES[code];
+
+
+      const badgeClass =
+
+        info.type === 'early'
+          ? 'badge-early'
+          : info.type === 'late'
+            ? 'badge-late'
+            : 'badge-leave';
+
+
+      const badgeText =
+
+        info.type === 'leave'
+          ? info.label
+          : code;
+
+
+      const timeText =
+
+        info.type === 'leave'
+          ? ''
+          : `<div class="dc-time">${
+              info.time.split('–')[0]
+            }起</div>`;
+
+
+      inner =
+
+        `<span class="dc-badge ${badgeClass}">
+          ${badgeText}
+        </span>` +
+
+        timeText;
+
     }
-    html += `<div class="day-chip ${isToday?'today':''}">
-      <div class="dc-weekday">${wd}</div>
-      <div class="dc-date">${m}/${d}</div>
-      ${inner}
-    </div>`;
+
+
+    html += `
+
+      <div class="day-chip ${
+        isToday ? 'today' : ''
+      }">
+
+        <div class="dc-weekday">
+          ${wd}
+        </div>
+
+        <div class="dc-date">
+          ${m}/${d}
+        </div>
+
+        ${inner}
+
+      </div>
+
+    `;
+
   }
+
+
   el.innerHTML = html;
+
 }
+
+
+/* =========================================================
+   月曆
+   ========================================================= */
 
 function renderMonth(){
-  document.getElementById('monthTitle').textContent = `${viewYear}年 ${viewMonth}月`;
-  const grid = document.getElementById('monthGrid');
-  const firstDow = new Date(viewYear, viewMonth-1, 1).getDay();
-  const total = daysInMonth(viewYear, viewMonth);
+
+  document.getElementById(
+    'monthTitle'
+  ).textContent =
+    `${viewYear}年 ${viewMonth}月`;
+
+
+  const grid =
+    document.getElementById(
+      'monthGrid'
+    );
+
+
+  const firstDow =
+    new Date(
+      viewYear,
+      viewMonth-1,
+      1
+    ).getDay();
+
+
+  const total =
+    daysInMonth(
+      viewYear,
+      viewMonth
+    );
+
+
   let html = '';
-  for(let i=0;i<firstDow;i++) html += `<div class="day-cell empty-cell"></div>`;
-  for(let d=1; d<=total; d++){
-    const dateStr = fmtDate(viewYear, viewMonth, d);
-    const code = shifts[dateStr];
-    const isToday = dateStr === todayStr;
-    let inner = '';
-    let flagDot = '';
-    if(code && CODES[code]){
-      const info = CODES[code];
-      const chipClass = info.type==='early' ? 'badge-early' : (info.type==='late' ? 'badge-late' : 'badge-leave');
-      const chipText = info.type==='leave' ? info.label : code;
-      inner = `<span class="chip ${chipClass}">${chipText}</span>`;
-      if(info.type!=='leave') inner += `<span class="mini-time">${info.time.split('–')[0]}</span>`;
-      if(info.note) flagDot = `<span class="flag-dot" title="${info.note}"></span>`;
-    }
-    html += `<div class="day-cell ${isToday?'is-today':''}" data-date="${dateStr}">
-      ${flagDot}
-      <span class="num">${d}</span>
-      ${inner}
-    </div>`;
+
+
+  for(
+    let i=0;
+    i<firstDow;
+    i++
+  ){
+
+    html +=
+      `<div class="day-cell empty-cell"></div>`;
+
   }
+
+
+  for(
+    let d=1;
+    d<=total;
+    d++
+  ){
+
+    const dateStr =
+      fmtDate(
+        viewYear,
+        viewMonth,
+        d
+      );
+
+
+    const code =
+      shifts[dateStr];
+
+
+    const isToday =
+      dateStr === todayStr;
+
+
+    let inner = '';
+
+    let flagDot = '';
+
+
+    if(code && CODES[code]){
+
+      const info =
+        CODES[code];
+
+
+      const chipClass =
+
+        info.type === 'early'
+          ? 'badge-early'
+          : info.type === 'late'
+            ? 'badge-late'
+            : 'badge-leave';
+
+
+      const chipText =
+
+        info.type === 'leave'
+          ? info.label
+          : code;
+
+
+      inner =
+        `<span class="chip ${chipClass}">
+          ${chipText}
+        </span>`;
+
+
+      if(info.type !== 'leave'){
+
+        inner +=
+          `<span class="mini-time">
+            ${info.time.split('–')[0]}
+          </span>`;
+
+      }
+
+
+      if(info.note){
+
+        flagDot =
+          `<span
+             class="flag-dot"
+             title="${info.note}">
+           </span>`;
+
+      }
+
+    }
+
+
+    html += `
+
+      <div
+        class="day-cell ${
+          isToday ? 'is-today' : ''
+        }"
+        data-date="${dateStr}"
+      >
+
+        ${flagDot}
+
+        <span class="num">
+          ${d}
+        </span>
+
+        ${inner}
+
+      </div>
+
+    `;
+
+  }
+
+
   grid.innerHTML = html;
-  grid.querySelectorAll('.day-cell[data-date]').forEach(cell=>{
-    cell.addEventListener('click', ()=> openDayModal(cell.dataset.date));
-  });
+
+
+  grid
+    .querySelectorAll(
+      '.day-cell[data-date]'
+    )
+    .forEach(
+      cell => {
+
+        cell.addEventListener(
+          'click',
+          ()=>{
+            openDayModal(
+              cell.dataset.date
+            );
+          }
+        );
+
+      }
+    );
+
 }
+
+
+/* =========================================================
+   統計
+   ========================================================= */
 
 function renderStats(){
-  const card = document.getElementById('statsCard');
-  const quota = (viewYear === QUOTA_YEAR) ? MONTH_QUOTA[viewMonth] : null;
 
-  const total = daysInMonth(viewYear, viewMonth);
-  let count = {例假:0, 休息:0, 國定:0, 特休:0, 生日:0, 抵休:0};
-  for(let d=1; d<=total; d++){
-    const dateStr = fmtDate(viewYear, viewMonth, d);
-    const code = shifts[dateStr];
-    if(code && CODES[code] && CODES[code].type==='leave'){
-      count[CODES[code].category]++;
+  const card =
+    document.getElementById(
+      'statsCard'
+    );
+
+
+  const quota =
+    viewYear === QUOTA_YEAR
+      ? MONTH_QUOTA[viewMonth]
+      : null;
+
+
+  const total =
+    daysInMonth(
+      viewYear,
+      viewMonth
+    );
+
+
+  let count = {
+
+    例假:0,
+    休息:0,
+    國定:0,
+    特休:0,
+    生日:0,
+    抵休:0
+
+  };
+
+
+  for(
+    let d=1;
+    d<=total;
+    d++
+  ){
+
+    const dateStr =
+      fmtDate(
+        viewYear,
+        viewMonth,
+        d
+      );
+
+
+    const code =
+      shifts[dateStr];
+
+
+    if(
+      code &&
+      CODES[code] &&
+      CODES[code].type === 'leave'
+    ){
+
+      count[
+        CODES[code].category
+      ]++;
+
     }
+
   }
-  const usedTotal = count.例假 + count.休息 + count.國定;
+
+
+  const usedTotal =
+    count.例假 +
+    count.休息 +
+    count.國定;
+
 
   if(!quota){
-    card.innerHTML = `<div class="no-quota">此月份沒有休假規則資料（規則自 2026 年 1 月起提供），僅顯示已輸入的休假統計。</div>
-      <div class="extra-row" style="margin-top:10px;">
-        <span>特休 <b>${count.特休}</b> 天</span>
-        <span>生日假 <b>${count.生日}</b> 天</span>
-        <span>抵休 <b>${count.抵休}</b> 天</span>
-        <span>例假 <b>${count.例假}</b>／休息日 <b>${count.休息}</b>／國定 <b>${count.國定}</b></span>
-      </div>`;
+
+    card.innerHTML = `
+
+      <div class="no-quota">
+        此月份沒有休假規則資料，
+        僅顯示已輸入的休假統計。
+      </div>
+
+      <div
+        class="extra-row"
+        style="margin-top:10px;"
+      >
+
+        <span>
+          特休 <b>${count.特休}</b> 天
+        </span>
+
+        <span>
+          生日假 <b>${count.生日}</b> 天
+        </span>
+
+        <span>
+          抵休 <b>${count.抵休}</b> 天
+        </span>
+
+        <span>
+          例假 <b>${count.例假}</b> /
+          休息日 <b>${count.休息}</b> /
+          國定 <b>${count.國定}</b>
+        </span>
+
+      </div>
+
+    `;
+
     return;
+
   }
 
-  function pill(label, used, max){
-    const over = used > max;
-    return `<div class="quota-pill ${over?'over':'ok'}">
-      <div class="ql-label">${label}</div>
-      <div class="ql-val">${used} / ${max}</div>
-    </div>`;
+
+  function pill(
+    label,
+    used,
+    max
+  ){
+
+    const over =
+      used > max;
+
+
+    return `
+
+      <div class="quota-pill ${
+        over ? 'over' : 'ok'
+      }">
+
+        <div class="ql-label">
+          ${label}
+        </div>
+
+        <div class="ql-val">
+          ${used} / ${max}
+        </div>
+
+      </div>
+
+    `;
+
   }
+
 
   card.innerHTML = `
+
     <div class="stats-top">
-      <div class="big">${usedTotal} <span>／ 可休 ${quota.total} 天</span></div>
+
+      <div class="big">
+
+        ${usedTotal}
+
+        <span>
+          ／ 可休 ${quota.total} 天
+        </span>
+
+      </div>
+
     </div>
+
+
     <div class="quota-row">
-      ${pill('例假', count.例假, quota.例假)}
-      ${pill('休息日', count.休息, quota.休息)}
-      ${pill('國定假', count.國定, quota.國定)}
+
+      ${pill(
+        '例假',
+        count.例假,
+        quota.例假
+      )}
+
+      ${pill(
+        '休息日',
+        count.休息,
+        quota.休息
+      )}
+
+      ${pill(
+        '國定假',
+        count.國定,
+        quota.國定
+      )}
+
     </div>
+
+
     <div class="extra-row">
-      <span>特休 <b>${count.特休}</b> 天</span>
-      <span>生日假 <b>${count.生日}</b> 天</span>
-      <span>抵休 <b>${count.抵休}</b> 天</span>
-    </div>`;
+
+      <span>
+        特休 <b>${count.特休}</b> 天
+      </span>
+
+      <span>
+        生日假 <b>${count.生日}</b> 天
+      </span>
+
+      <span>
+        抵休 <b>${count.抵休}</b> 天
+      </span>
+
+    </div>
+
+  `;
+
 }
+
+
+/* =========================================================
+   Render All
+   ========================================================= */
 
 function renderAll(){
+
   renderToday();
+
   renderWeek();
+
   renderMonth();
+
   renderStats();
+
 }
 
-/* ---------------- Event Listeners ---------------- */
-document.getElementById('prevMonthBtn').addEventListener('click', ()=>{
-  viewMonth--; if(viewMonth<1){ viewMonth=12; viewYear--; }
-  renderMonth(); renderStats();
-});
-document.getElementById('nextMonthBtn').addEventListener('click', ()=>{
-  viewMonth++; if(viewMonth>12){ viewMonth=1; viewYear++; }
-  renderMonth(); renderStats();
-});
-document.getElementById('todayMonthBtn').addEventListener('click', ()=>{
-  viewYear = todayObj.getFullYear(); viewMonth = todayObj.getMonth()+1;
-  renderMonth(); renderStats();
-});
 
-const batchOverlay = document.getElementById('batchOverlay');
-document.getElementById('openBatchBtn').addEventListener('click', ()=>{
-  document.getElementById('batchMonth').value = `${viewYear}-${pad(viewMonth)}`;
-  document.getElementById('batchText').value = '';
-  document.getElementById('previewWrap').style.display = 'none';
-  batchOverlay.classList.add('show');
-});
-document.getElementById('closeBatchBtn').addEventListener('click', ()=> batchOverlay.classList.remove('show'));
-batchOverlay.addEventListener('click', (e)=>{ if(e.target===batchOverlay) batchOverlay.classList.remove('show'); });
+/* =========================================================
+   月份切換
+   ========================================================= */
 
-function parseBatchInput(text, year, month){
-  const lines = text.split('\n');
-  const result = {}; const errors = [];
+document
+  .getElementById('prevMonthBtn')
+  .addEventListener(
+    'click',
+    ()=>{
+
+      viewMonth--;
+
+      if(viewMonth < 1){
+
+        viewMonth = 12;
+        viewYear--;
+
+      }
+
+      renderMonth();
+      renderStats();
+
+    }
+  );
+
+
+document
+  .getElementById('nextMonthBtn')
+  .addEventListener(
+    'click',
+    ()=>{
+
+      viewMonth++;
+
+      if(viewMonth > 12){
+
+        viewMonth = 1;
+        viewYear++;
+
+      }
+
+      renderMonth();
+      renderStats();
+
+    }
+  );
+
+
+document
+  .getElementById('todayMonthBtn')
+  .addEventListener(
+    'click',
+    ()=>{
+
+      viewYear =
+        todayObj.getFullYear();
+
+      viewMonth =
+        todayObj.getMonth()+1;
+
+      renderMonth();
+      renderStats();
+
+    }
+  );
+
+
+/* =========================================================
+   批次輸入 Modal
+   ========================================================= */
+
+const batchOverlay =
+  document.getElementById(
+    'batchOverlay'
+  );
+
+
+document
+  .getElementById('openBatchBtn')
+  .addEventListener(
+    'click',
+    ()=>{
+
+      document.getElementById(
+        'batchMonth'
+      ).value =
+        `${viewYear}-${pad(viewMonth)}`;
+
+
+      document.getElementById(
+        'batchText'
+      ).value = '';
+
+
+      document.getElementById(
+        'previewWrap'
+      ).style.display =
+        'none';
+
+
+      batchOverlay
+        .classList
+        .add('show');
+
+    }
+  );
+
+
+document
+  .getElementById('closeBatchBtn')
+  .addEventListener(
+    'click',
+    ()=>{
+      batchOverlay
+        .classList
+        .remove('show');
+    }
+  );
+
+
+batchOverlay
+  .addEventListener(
+    'click',
+    e => {
+
+      if(
+        e.target === batchOverlay
+      ){
+
+        batchOverlay
+          .classList
+          .remove('show');
+
+      }
+
+    }
+  );
+
+
+/* =========================================================
+   批次資料解析
+   ========================================================= */
+
+function parseBatchInput(
+  text,
+  year,
+  month
+){
+
+  const lines =
+    text.split('\n');
+
+
+  const result = {};
+
+  const errors = [];
+
+
   for(const raw of lines){
-    let line = raw.trim();
-    if(!line || line.startsWith('#')) continue;
-    line = line.replace(/[,\t、]+/g, ' ').replace(/\s+/g, ' ');
-    const parts = line.split(' ');
-    if(parts.length < 2){ errors.push(`無法解析：「${raw}」`); continue; }
-    const dayPart = parts[0];
-    const code = parts.slice(1).join(' ').trim().toUpperCase() === parts.slice(1).join(' ').trim()
-      ? parts.slice(1).join(' ').trim()
-      : parts.slice(1).join(' ').trim().toUpperCase();
-    const codeKey = CODES[code] ? code : code.toUpperCase();
-    if(!CODES[codeKey]){ errors.push(`未知代號「${code}」：「${raw}」`); continue; }
+
+    let line =
+      raw.trim();
+
+
+    if(
+      !line ||
+      line.startsWith('#')
+    ){
+
+      continue;
+
+    }
+
+
+    line =
+      line
+        .replace(
+          /[,\t、]+/g,
+          ' '
+        )
+        .replace(
+          /\s+/g,
+          ' '
+        );
+
+
+    const parts =
+      line.split(' ');
+
+
+    if(parts.length < 2){
+
+      errors.push(
+        `無法解析：「${raw}」`
+      );
+
+      continue;
+
+    }
+
+
+    const dayPart =
+      parts[0];
+
+
+    const rawCode =
+      parts
+        .slice(1)
+        .join(' ')
+        .trim();
+
+
+    const code =
+      CODES[rawCode]
+        ? rawCode
+        : rawCode.toUpperCase();
+
+
+    if(!CODES[code]){
+
+      errors.push(
+        `未知代號「${rawCode}」：「${raw}」`
+      );
+
+      continue;
+
+    }
+
 
     let dates = [];
-    if(/^\d{4}-\d{1,2}-\d{1,2}$/.test(dayPart)){
-      const [yy,mm,dd] = dayPart.split('-').map(Number);
-      dates = [fmtDate(yy,mm,dd)];
-    } else if(/^\d{1,2}-\d{1,2}$/.test(dayPart)){
-      const [s,e] = dayPart.split('-').map(Number);
-      if(s>e || s<1 || e>31){ errors.push(`日期區間錯誤：「${raw}」`); continue; }
-      for(let d=s; d<=e; d++) dates.push(fmtDate(year, month, d));
-    } else if(/^\d{1,2}$/.test(dayPart)){
-      dates = [fmtDate(year, month, Number(dayPart))];
-    } else {
-      errors.push(`無法解析日期：「${raw}」`); continue;
+
+
+    if(
+      /^\d{4}-\d{1,2}-\d{1,2}$/
+        .test(dayPart)
+    ){
+
+      const [
+        yy,
+        mm,
+        dd
+      ] =
+        dayPart
+          .split('-')
+          .map(Number);
+
+
+      dates = [
+        fmtDate(
+          yy,
+          mm,
+          dd
+        )
+      ];
+
     }
-    for(const d of dates) result[d] = codeKey;
+
+
+    else if(
+      /^\d{1,2}-\d{1,2}$/
+        .test(dayPart)
+    ){
+
+      const [
+        s,
+        e
+      ] =
+        dayPart
+          .split('-')
+          .map(Number);
+
+
+      if(
+        s > e ||
+        s < 1 ||
+        e > 31
+      ){
+
+        errors.push(
+          `日期區間錯誤：「${raw}」`
+        );
+
+        continue;
+
+      }
+
+
+      for(
+        let d=s;
+        d<=e;
+        d++
+      ){
+
+        if(
+          d <= daysInMonth(
+            year,
+            month
+          )
+        ){
+
+          dates.push(
+            fmtDate(
+              year,
+              month,
+              d
+            )
+          );
+
+        }
+
+      }
+
+    }
+
+
+    else if(
+      /^\d{1,2}$/
+        .test(dayPart)
+    ){
+
+      const day =
+        Number(dayPart);
+
+
+      if(
+        day < 1 ||
+        day > daysInMonth(
+          year,
+          month
+        )
+      ){
+
+        errors.push(
+          `日期超出當月範圍：「${raw}」`
+        );
+
+        continue;
+
+      }
+
+
+      dates = [
+
+        fmtDate(
+          year,
+          month,
+          day
+        )
+
+      ];
+
+    }
+
+
+    else{
+
+      errors.push(
+        `無法解析日期：「${raw}」`
+      );
+
+      continue;
+
+    }
+
+
+    for(const d of dates){
+
+      result[d] =
+        code;
+
+    }
+
   }
-  return {result, errors};
+
+
+  return {
+    result,
+    errors
+  };
+
 }
+
+
+/* =========================================================
+   取得批次月份
+   ========================================================= */
 
 function currentBatchYM(){
-  const val = document.getElementById('batchMonth').value;
-  if(!val) return null;
-  const [y,m] = val.split('-').map(Number);
-  return {y,m};
+
+  const val =
+    document.getElementById(
+      'batchMonth'
+    ).value;
+
+
+  if(!val){
+
+    return null;
+
+  }
+
+
+  const [
+    y,
+    m
+  ] =
+    val
+      .split('-')
+      .map(Number);
+
+
+  return {
+    y,
+    m
+  };
+
 }
 
-document.getElementById('previewBtn').addEventListener('click', ()=>{
-  const ym = currentBatchYM();
-  if(!ym){ showToast('請先選擇月份'); return; }
-  const text = document.getElementById('batchText').value;
-  const {result, errors} = parseBatchInput(text, ym.y, ym.m);
-  const wrap = document.getElementById('previewWrap');
-  const box = document.getElementById('previewBox');
-  wrap.style.display = 'block';
-  const entries = Object.entries(result).sort();
-  let html = '';
-  if(entries.length===0 && errors.length===0){
-    html = `<div class="pv-line" style="color:var(--muted)">尚未輸入任何內容</div>`;
-  }
-  entries.forEach(([date, code])=>{
-    const info = CODES[code];
-    const desc = info.type==='leave' ? info.label : `${info.type==='early'?'早班':'晚班'} ${info.time}`;
-    html += `<div class="pv-line">${date} ${code} ${desc}</div>`;
-  });
-  errors.forEach(err=> html += `<div class="pv-line pv-err">⚠ ${err}</div>`);
-  html += `<div class="pv-line" style="color:var(--muted); margin-top:6px;">共 ${entries.length} 筆，${errors.length} 筆錯誤</div>`;
-  box.innerHTML = html;
-});
 
-document.getElementById('applyBatchBtn').addEventListener('click', async ()=>{
-  const ym = currentBatchYM();
-  if(!ym){ showToast('請先選擇月份'); return; }
-  const text = document.getElementById('batchText').value;
-  const {result, errors} = parseBatchInput(text, ym.y, ym.m);
-  if(Object.keys(result).length===0){ showToast('沒有可套用的資料'); return; }
+/* =========================================================
+   預覽
+   ========================================================= */
 
-  if(document.getElementById('clearMonthFirst').checked){
-    const total = daysInMonth(ym.y, ym.m);
-    for(let d=1; d<=total; d++){
-      delete shifts[fmtDate(ym.y, ym.m, d)];
+document
+  .getElementById('previewBtn')
+  .addEventListener(
+    'click',
+    ()=>{
+
+      const ym =
+        currentBatchYM();
+
+
+      if(!ym){
+
+        showToast(
+          '請先選擇月份'
+        );
+
+        return;
+
+      }
+
+
+      const text =
+        document.getElementById(
+          'batchText'
+        ).value;
+
+
+      const {
+        result,
+        errors
+      } =
+        parseBatchInput(
+          text,
+          ym.y,
+          ym.m
+        );
+
+
+      const wrap =
+        document.getElementById(
+          'previewWrap'
+        );
+
+
+      const box =
+        document.getElementById(
+          'previewBox'
+        );
+
+
+      wrap.style.display =
+        'block';
+
+
+      const entries =
+        Object.entries(result)
+          .sort();
+
+
+      let html = '';
+
+
+      if(
+        entries.length === 0 &&
+        errors.length === 0
+      ){
+
+        html = `
+
+          <div
+            class="pv-line"
+            style="color:var(--muted)"
+          >
+            尚未輸入任何內容
+          </div>
+
+        `;
+
+      }
+
+
+      entries.forEach(
+        ([date,code])=>{
+
+          const info =
+            CODES[code];
+
+
+          const desc =
+
+            info.type === 'leave'
+
+              ? info.label
+
+              : `${
+                  info.type === 'early'
+                    ? '早班'
+                    : '晚班'
+                } ${info.time}`;
+
+
+          html += `
+
+            <div class="pv-line">
+
+              ${date}
+              ${code}
+              ${desc}
+
+            </div>
+
+          `;
+
+        }
+      );
+
+
+      errors.forEach(
+        err => {
+
+          html += `
+
+            <div class="pv-line pv-err">
+
+              ⚠ ${err}
+
+            </div>
+
+          `;
+
+        }
+      );
+
+
+      html += `
+
+        <div
+          class="pv-line"
+          style="
+            color:var(--muted);
+            margin-top:6px;
+          "
+        >
+          共 ${entries.length} 筆，
+          ${errors.length} 筆錯誤
+        </div>
+
+      `;
+
+
+      box.innerHTML =
+        html;
+
     }
-  }
-  Object.assign(shifts, result);
-  viewYear = ym.y; viewMonth = ym.m;
-  renderAll();
-  batchOverlay.classList.remove('show');
-  showToast('同步上傳中…');
-  await saveData();
-  showToast(`已成功套用並雲端同步 ${Object.keys(result).length} 筆班表`);
-});
+  );
 
-const dayOverlay = document.getElementById('dayOverlay');
+
+/* =========================================================
+   批次套用並同步
+   ========================================================= */
+
+document
+  .getElementById('applyBatchBtn')
+  .addEventListener(
+    'click',
+    async ()=>{
+
+      const ym =
+        currentBatchYM();
+
+
+      if(!ym){
+
+        showToast(
+          '請先選擇月份'
+        );
+
+        return;
+
+      }
+
+
+      const text =
+        document.getElementById(
+          'batchText'
+        ).value;
+
+
+      const {
+        result,
+        errors
+      } =
+        parseBatchInput(
+          text,
+          ym.y,
+          ym.m
+        );
+
+
+      if(
+        Object.keys(result).length === 0
+      ){
+
+        showToast(
+          errors.length
+            ? '輸入內容有錯誤'
+            : '沒有可套用的資料'
+        );
+
+        return;
+
+      }
+
+
+      if(
+        document.getElementById(
+          'clearMonthFirst'
+        ).checked
+      ){
+
+        const total =
+          daysInMonth(
+            ym.y,
+            ym.m
+          );
+
+
+        for(
+          let d=1;
+          d<=total;
+          d++
+        ){
+
+          delete shifts[
+            fmtDate(
+              ym.y,
+              ym.m,
+              d
+            )
+          ];
+
+        }
+
+      }
+
+
+      Object.assign(
+        shifts,
+        result
+      );
+
+
+      viewYear =
+        ym.y;
+
+      viewMonth =
+        ym.m;
+
+
+      renderAll();
+
+
+      batchOverlay
+        .classList
+        .remove('show');
+
+
+      showToast(
+        '正在同步雲端…'
+      );
+
+
+      const success =
+        await saveData();
+
+
+      if(success){
+
+        showToast(
+          `已成功同步 ${
+            Object.keys(result).length
+          } 筆班表`
+        );
+
+      }else{
+
+        showToast(
+          '雲端同步失敗，資料目前只保存在此裝置'
+        );
+
+      }
+
+    }
+  );
+
+
+/* =========================================================
+   單日編輯
+   ========================================================= */
+
+const dayOverlay =
+  document.getElementById(
+    'dayOverlay'
+  );
+
+
 let editingDate = null;
 
+
+/* 建立班別選單 */
+
 function buildDaySelect(){
-  const sel = document.getElementById('dayCodeSelect');
-  const groups = {'早班':[], '晚班':[], '休假':[]};
-  Object.entries(CODES).forEach(([code, info])=>{
-    if(info.type==='early') groups['早班'].push([code, `${code} ${info.time}${info.note? '（'+info.note+'）':''}`]);
-    else if(info.type==='late') groups['晚班'].push([code, `${code} ${info.time}${info.note? '（'+info.note+'）':''}`]);
-    else groups['休假'].push([code, `${code} ${info.label}`]);
-  });
-  let html = `<option value="">（未排班）</option>`;
-  Object.entries(groups).forEach(([g, items])=>{
-    html += `<optgroup label="${g}">`;
-    items.forEach(([code,label])=> html += `<option value="${code}">${label}</option>`);
-    html += `</optgroup>`;
-  });
-  sel.innerHTML = html;
+
+  const sel =
+    document.getElementById(
+      'dayCodeSelect'
+    );
+
+
+  const groups = {
+
+    '早班':[],
+    '晚班':[],
+    '休假':[]
+
+  };
+
+
+  Object.entries(
+    CODES
+  ).forEach(
+    ([code,info])=>{
+
+      if(
+        info.type === 'early'
+      ){
+
+        groups['早班'].push(
+          [
+            code,
+            `${code} ${info.time}${
+              info.note
+                ? '（'+info.note+'）'
+                : ''
+            }`
+          ]
+        );
+
+      }
+
+      else if(
+        info.type === 'late'
+      ){
+
+        groups['晚班'].push(
+          [
+            code,
+            `${code} ${info.time}${
+              info.note
+                ? '（'+info.note+'）'
+                : ''
+            }`
+          ]
+        );
+
+      }
+
+      else{
+
+        groups['休假'].push(
+          [
+            code,
+            `${code} ${info.label}`
+          ]
+        );
+
+      }
+
+    }
+  );
+
+
+  let html =
+    `<option value="">
+      （未排班）
+    </option>`;
+
+
+  Object.entries(
+    groups
+  ).forEach(
+    ([group,items])=>{
+
+      html +=
+        `<optgroup label="${group}">`;
+
+
+      items.forEach(
+        ([code,label])=>{
+
+          html +=
+            `<option value="${code}">
+              ${label}
+            </option>`;
+
+        }
+      );
+
+
+      html +=
+        `</optgroup>`;
+
+    }
+  );
+
+
+  sel.innerHTML =
+    html;
+
 }
+
+
 buildDaySelect();
 
-function openDayModal(dateStr){
-  editingDate = dateStr;
-  const [y,m,d] = dateStr.split('-').map(Number);
-  document.getElementById('dayModalTitle').textContent = `編輯 ${y}/${m}/${d}（${WEEKDAYS_ZH[weekdayOf(dateStr)]}）`;
-  document.getElementById('dayCodeSelect').value = shifts[dateStr] || '';
-  dayOverlay.classList.add('show');
+
+/* 開啟單日 */
+
+function openDayModal(
+  dateStr
+){
+
+  editingDate =
+    dateStr;
+
+
+  const [
+    y,
+    m,
+    d
+  ] =
+    dateStr
+      .split('-')
+      .map(Number);
+
+
+  document.getElementById(
+    'dayModalTitle'
+  ).textContent =
+
+    `編輯 ${y}/${m}/${d}（${
+      WEEKDAYS_ZH[
+        weekdayOf(dateStr)
+      ]
+    }）`;
+
+
+  document.getElementById(
+    'dayCodeSelect'
+  ).value =
+    shifts[dateStr] || '';
+
+
+  dayOverlay
+    .classList
+    .add('show');
+
 }
-document.getElementById('closeDayBtn').addEventListener('click', ()=> dayOverlay.classList.remove('show'));
-dayOverlay.addEventListener('click', (e)=>{ if(e.target===dayOverlay) dayOverlay.classList.remove('show'); });
 
-document.getElementById('saveDayBtn').addEventListener('click', async ()=>{
-  if(!editingDate) return;
-  const val = document.getElementById('dayCodeSelect').value;
-  if(val) shifts[editingDate] = val; else delete shifts[editingDate];
-  renderAll();
-  dayOverlay.classList.remove('show');
-  showToast('同步上傳中…');
-  await saveData();
-  showToast('已更新並完成同步');
-});
 
-document.getElementById('clearDayBtn').addEventListener('click', async ()=>{
-  if(!editingDate) return;
-  delete shifts[editingDate];
-  renderAll();
-  dayOverlay.classList.remove('show');
-  showToast('同步上傳中…');
-  await saveData();
-  showToast('已清除並完成同步');
-});
+/* 關閉 */
 
-/* ---------------- Init ---------------- */
+document
+  .getElementById('closeDayBtn')
+  .addEventListener(
+    'click',
+    ()=>{
+      dayOverlay
+        .classList
+        .remove('show');
+    }
+  );
+
+
+dayOverlay
+  .addEventListener(
+    'click',
+    e => {
+
+      if(
+        e.target === dayOverlay
+      ){
+
+        dayOverlay
+          .classList
+          .remove('show');
+
+      }
+
+    }
+  );
+
+
+/* =========================================================
+   單日儲存
+   ========================================================= */
+
+document
+  .getElementById('saveDayBtn')
+  .addEventListener(
+    'click',
+    async ()=>{
+
+      if(!editingDate){
+
+        return;
+
+      }
+
+
+      const val =
+        document.getElementById(
+          'dayCodeSelect'
+        ).value;
+
+
+      if(val){
+
+        shifts[
+          editingDate
+        ] =
+          val;
+
+      }else{
+
+        delete shifts[
+          editingDate
+        ];
+
+      }
+
+
+      renderAll();
+
+
+      dayOverlay
+        .classList
+        .remove('show');
+
+
+      showToast(
+        '正在同步雲端…'
+      );
+
+
+      const success =
+        await saveData();
+
+
+      showToast(
+
+        success
+          ? '已更新並完成同步'
+          : '更新完成，但雲端同步失敗'
+
+      );
+
+    }
+  );
+
+
+/* =========================================================
+   單日清除
+   ========================================================= */
+
+document
+  .getElementById('clearDayBtn')
+  .addEventListener(
+    'click',
+    async ()=>{
+
+      if(!editingDate){
+
+        return;
+
+      }
+
+
+      delete shifts[
+        editingDate
+      ];
+
+
+      renderAll();
+
+
+      dayOverlay
+        .classList
+        .remove('show');
+
+
+      showToast(
+        '正在同步雲端…'
+      );
+
+
+      const success =
+        await saveData();
+
+
+      showToast(
+
+        success
+          ? '已清除並完成同步'
+          : '已清除，但雲端同步失敗'
+
+      );
+
+    }
+  );
+
+
+/* =========================================================
+   初始化
+   ========================================================= */
+
 (async function init(){
-  viewYear = todayObj.getFullYear();
-  viewMonth = todayObj.getMonth()+1;
-  document.getElementById('todayCard').innerHTML = `<div class="punch-card"><div class="punch-left"><div class="weekday">同步資料中…</div></div></div>`;
+
+  viewYear =
+    todayObj.getFullYear();
+
+
+  viewMonth =
+    todayObj.getMonth()+1;
+
+
+  document.getElementById(
+    'todayCard'
+  ).innerHTML = `
+
+    <div class="punch-card">
+
+      <div class="punch-left">
+
+        <div class="weekday">
+          同步資料中…
+        </div>
+
+      </div>
+
+    </div>
+
+  `;
+
+
   await loadData();
+
+
   renderAll();
+
 })();
+
 </script>
+
 </body>
 </html>
