@@ -760,12 +760,35 @@ select{
 
 /* ---------- Mobile ---------- */
 
-@media(max-width:480px){
+@media(max-width:600px){
 
-  .wrap{
-    padding-left:16px;
-    padding-right:16px;
+  /* Q002、Q013 等班別代號 */
+  .day-cell .chip{
+    font-size:8px !important;
+    padding:2px 3px;
+    line-height:1.4;
   }
+
+  /* 08:00、13:00 等上班時間 */
+  .day-cell .mini-time{
+    font-size:11px !important;
+    line-height:1.3;
+    white-space:nowrap;
+  }
+
+}
+
+@media(max-width:380px){
+
+  .punch-left .datenum{
+    font-size:36px;
+  }
+
+  .punch-right .time{
+    font-size:19px;
+  }
+
+}
 
   .day-cell{
     padding:6px 4px;
