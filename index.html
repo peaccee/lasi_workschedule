@@ -9,7 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --ink:#1b2028;
+    --ink:#f7f7f5;
     --ink-soft:#282f3d;
     --paper:#f1f3f8;
     --paper-dim:#dbe0ea;
@@ -350,6 +350,12 @@
 </div>
 
 <script>
+// ==================== 雲端同步設定 (JSONBin) ====================
+const CONFIG = {
+  BIN_ID: '6a8ee77cda38895dfe133f1b',
+  API_KEY: '$2a$10$R9cVF01Xj9aDQmsVpgUTHuMwmQk1daAwUqrnOdwXBacpv.0wvcQB.'
+};
+
 const CODES = {
   Q002:{type:'early', time:'08:00–17:00', note:''},
   Q003:{type:'early', time:'08:30–17:30', note:''},
@@ -390,9 +396,8 @@ const QUOTA_YEAR = 2026;
 const WEEKDAYS_ZH = ['週日','週一','週二','週三','週四','週五','週六'];
 const WEEKDAYS_SHORT = ['日','一','二','三','四','五','六'];
 
-const STORAGE_KEY = 'shift-calendar-data';
 let shifts = {};       // { 'YYYY-MM-DD': code }
-let viewYear, viewMonth; // calendar section state (1-12)
+let viewYear, viewMonth; 
 const todayObj = new Date();
 const todayStr = fmtDate(todayObj.getFullYear(), todayObj.getMonth()+1, todayObj.getDate());
 
@@ -418,26 +423,42 @@ function showToast(msg){
   showToast._tm = setTimeout(()=> t.classList.remove('show'), 2200);
 }
 
+/* ---------------- 雲端資料庫同步核心 ---------------- */
 async function loadData(){
   try{
-    const res = await window.storage.get(STORAGE_KEY, false);
-    if(res && res.value){
-      const parsed = JSON.parse(res.value);
-      shifts = parsed.shifts || {};
-    }
+    const res = await fetch(`https://api.jsonbin.io/v3/b/${CONFIG.BIN_ID}/latest`, {
+      headers: { 'X-Master-Key': CONFIG.API_KEY }
+    });
+    if(!res.ok) throw new Error('雲端讀取失敗');
+    const data = await res.json();
+    shifts = data.record.shifts || {};
   }catch(e){
-    shifts = {};
-  }
-}
-async function saveData(){
-  try{
-    await window.storage.set(STORAGE_KEY, JSON.stringify({shifts}), false);
-  }catch(e){
-    showToast('儲存失敗，請再試一次');
+    console.error(e);
+    showToast('雲端讀取失敗，顯示本地快照');
+    const local = localStorage.getItem('shift-data-cache');
+    if(local) shifts = JSON.parse(local);
   }
 }
 
-/* ---------------- Rendering: Today ---------------- */
+async function saveData(){
+  localStorage.setItem('shift-data-cache', JSON.stringify(shifts));
+  try{
+    const res = await fetch(`https://api.jsonbin.io/v3/b/${CONFIG.BIN_ID}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Master-Key': CONFIG.API_KEY
+      },
+      body: JSON.stringify({ shifts })
+    });
+    if(!res.ok) throw new Error('同步失敗');
+  }catch(e){
+    console.error(e);
+    showToast('雲端同步失敗，請檢查網路');
+  }
+}
+
+/* ---------------- Rendering Functions ---------------- */
 function renderToday(){
   const el = document.getElementById('todayCard');
   const code = shifts[todayStr];
@@ -473,7 +494,6 @@ function renderToday(){
     </div>`;
 }
 
-/* ---------------- Rendering: 7-day strip ---------------- */
 function renderWeek(){
   const el = document.getElementById('weekStrip');
   let html = '';
@@ -500,7 +520,6 @@ function renderWeek(){
   el.innerHTML = html;
 }
 
-/* ---------------- Rendering: Month calendar ---------------- */
 function renderMonth(){
   document.getElementById('monthTitle').textContent = `${viewYear}年 ${viewMonth}月`;
   const grid = document.getElementById('monthGrid');
@@ -534,7 +553,6 @@ function renderMonth(){
   });
 }
 
-/* ---------------- Rendering: Stats ---------------- */
 function renderStats(){
   const card = document.getElementById('statsCard');
   const quota = (viewYear === QUOTA_YEAR) ? MONTH_QUOTA[viewMonth] : null;
@@ -592,7 +610,7 @@ function renderAll(){
   renderStats();
 }
 
-/* ---------------- Month navigation ---------------- */
+/* ---------------- Event Listeners ---------------- */
 document.getElementById('prevMonthBtn').addEventListener('click', ()=>{
   viewMonth--; if(viewMonth<1){ viewMonth=12; viewYear--; }
   renderMonth(); renderStats();
@@ -606,7 +624,6 @@ document.getElementById('todayMonthBtn').addEventListener('click', ()=>{
   renderMonth(); renderStats();
 });
 
-/* ---------------- Batch input modal ---------------- */
 const batchOverlay = document.getElementById('batchOverlay');
 document.getElementById('openBatchBtn').addEventListener('click', ()=>{
   document.getElementById('batchMonth').value = `${viewYear}-${pad(viewMonth)}`;
@@ -652,7 +669,7 @@ function parseBatchInput(text, year, month){
 }
 
 function currentBatchYM(){
-  const val = document.getElementById('batchMonth').value; // YYYY-MM
+  const val = document.getElementById('batchMonth').value;
   if(!val) return null;
   const [y,m] = val.split('-').map(Number);
   return {y,m};
@@ -695,14 +712,14 @@ document.getElementById('applyBatchBtn').addEventListener('click', async ()=>{
     }
   }
   Object.assign(shifts, result);
-  await saveData();
   viewYear = ym.y; viewMonth = ym.m;
   renderAll();
   batchOverlay.classList.remove('show');
-  showToast(`已套用 ${Object.keys(result).length} 筆班表${errors.length? '，'+errors.length+' 筆略過' : ''}`);
+  showToast('同步上傳中…');
+  await saveData();
+  showToast(`已成功套用並雲端同步 ${Object.keys(result).length} 筆班表`);
 });
 
-/* ---------------- Single-day edit modal ---------------- */
 const dayOverlay = document.getElementById('dayOverlay');
 let editingDate = null;
 
@@ -738,25 +755,28 @@ document.getElementById('saveDayBtn').addEventListener('click', async ()=>{
   if(!editingDate) return;
   const val = document.getElementById('dayCodeSelect').value;
   if(val) shifts[editingDate] = val; else delete shifts[editingDate];
-  await saveData();
   renderAll();
   dayOverlay.classList.remove('show');
-  showToast('已儲存');
+  showToast('同步上傳中…');
+  await saveData();
+  showToast('已更新並完成同步');
 });
+
 document.getElementById('clearDayBtn').addEventListener('click', async ()=>{
   if(!editingDate) return;
   delete shifts[editingDate];
-  await saveData();
   renderAll();
   dayOverlay.classList.remove('show');
-  showToast('已清除');
+  showToast('同步上傳中…');
+  await saveData();
+  showToast('已清除並完成同步');
 });
 
 /* ---------------- Init ---------------- */
 (async function init(){
   viewYear = todayObj.getFullYear();
   viewMonth = todayObj.getMonth()+1;
-  document.getElementById('todayCard').innerHTML = `<div class="punch-card"><div class="punch-left"><div class="weekday">載入中…</div></div></div>`;
+  document.getElementById('todayCard').innerHTML = `<div class="punch-card"><div class="punch-left"><div class="weekday">同步資料中…</div></div></div>`;
   await loadData();
   renderAll();
 })();
