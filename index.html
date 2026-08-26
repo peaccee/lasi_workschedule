@@ -32,9 +32,12 @@
   box-sizing:border-box;
 }
 
-html,body{
+html,
+body{
   margin:0;
   padding:0;
+  width:100%;
+  max-width:100%;
 }
 
 body{
@@ -44,9 +47,11 @@ body{
   -webkit-font-smoothing:antialiased;
   min-height:100vh;
   padding-bottom:64px;
+  overflow-x:hidden;
 }
 
 .wrap{
+  width:100%;
   max-width:640px;
   margin:0 auto;
   padding:20px 16px 40px;
@@ -59,11 +64,13 @@ body{
   align-items:center;
   justify-content:space-between;
   margin-bottom:22px;
+  gap:12px;
 }
 
 .brand{
   display:flex;
   flex-direction:column;
+  min-width:0;
 }
 
 .brand .eyebrow{
@@ -100,6 +107,7 @@ body{
   cursor:pointer;
   display:inline-flex;
   align-items:center;
+  justify-content:center;
   gap:6px;
   transition:background .15s ease,transform .1s ease;
 }
@@ -150,6 +158,7 @@ section{
 
 .punch-card{
   position:relative;
+  width:100%;
   background:var(--paper);
   color:var(--ink);
   border-radius:var(--radius);
@@ -277,6 +286,7 @@ section{
   overflow-x:auto;
   padding:2px 2px 6px;
   scrollbar-width:none;
+  width:100%;
 }
 
 .week-scroll::-webkit-scrollbar{
@@ -312,6 +322,10 @@ section{
 
 .day-chip .dc-badge{
   display:inline-block;
+  max-width:100%;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
   font-family:'IBM Plex Mono',monospace;
   font-size:11px;
   font-weight:600;
@@ -354,6 +368,7 @@ section{
   align-items:center;
   justify-content:space-between;
   margin-bottom:10px;
+  width:100%;
 }
 
 .month-head .mh-title{
@@ -370,12 +385,14 @@ section{
 
 .weekday-row{
   display:grid;
-  grid-template-columns:repeat(7,1fr);
+  grid-template-columns:repeat(7,minmax(0,1fr));
   gap:6px;
+  width:100%;
   margin-bottom:6px;
 }
 
 .weekday-row span{
+  min-width:0;
   text-align:center;
   font-size:11px;
   color:var(--muted);
@@ -384,11 +401,16 @@ section{
 
 .month-grid{
   display:grid;
-  grid-template-columns:repeat(7,1fr);
+  grid-template-columns:repeat(7,minmax(0,1fr));
   gap:6px;
+  width:100%;
+  min-width:0;
 }
 
 .day-cell{
+  width:100%;
+  min-width:0;
+  max-width:100%;
   aspect-ratio:1 / 1.02;
   border-radius:10px;
   background:var(--ink-soft);
@@ -399,6 +421,7 @@ section{
   flex-direction:column;
   gap:3px;
   position:relative;
+  overflow:hidden;
   transition:background .12s ease,transform .08s ease;
 }
 
@@ -421,9 +444,11 @@ section{
 }
 
 .day-cell .num{
+  min-width:0;
   font-family:'IBM Plex Mono',monospace;
   font-size:11.5px;
   color:var(--muted);
+  line-height:1.2;
 }
 
 .day-cell.is-today .num{
@@ -432,6 +457,12 @@ section{
 }
 
 .day-cell .chip{
+  display:block;
+  max-width:100%;
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
   font-size:10px;
   font-weight:700;
   font-family:'IBM Plex Mono',monospace;
@@ -442,9 +473,16 @@ section{
 }
 
 .day-cell .mini-time{
+  display:block;
+  max-width:100%;
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
   font-size:9px;
   color:var(--muted);
   font-family:'IBM Plex Mono',monospace;
+  line-height:1.2;
 }
 
 .day-cell .flag-dot{
@@ -460,6 +498,7 @@ section{
 /* ---------- Stats ---------- */
 
 .stats-card{
+  width:100%;
   background:var(--ink-soft);
   border:1px solid var(--line);
   border-radius:var(--radius);
@@ -620,6 +659,7 @@ input[type=month],
 select,
 textarea{
   width:100%;
+  max-width:100%;
   background:var(--ink);
   border:1px solid var(--line);
   color:var(--paper);
@@ -738,7 +778,43 @@ select{
   transform:translateX(-50%) translateY(-6px);
 }
 
+/* ---------- Mobile ---------- */
+
+@media(max-width:480px){
+
+  .wrap{
+    padding-left:16px;
+    padding-right:16px;
+  }
+
+  .day-cell{
+    padding:6px 4px;
+  }
+
+  .day-cell .chip{
+    font-size:9px;
+    padding:2px 3px;
+  }
+
+  .day-cell .mini-time{
+    font-size:8px;
+  }
+
+}
+
 @media(max-width:380px){
+
+  .wrap{
+    padding-left:14px;
+    padding-right:14px;
+  }
+
+  .punch-card{
+    padding-left:18px;
+    padding-right:18px;
+    gap:14px;
+  }
+
   .punch-left .datenum{
     font-size:36px;
   }
@@ -746,6 +822,30 @@ select{
   .punch-right .time{
     font-size:19px;
   }
+
+  .weekday-row,
+  .month-grid{
+    gap:4px;
+  }
+
+  .day-cell{
+    padding:5px 3px;
+    border-radius:8px;
+  }
+
+  .day-cell .num{
+    font-size:10.5px;
+  }
+
+  .day-cell .chip{
+    font-size:8px;
+    padding:2px 2px;
+  }
+
+  .day-cell .mini-time{
+    font-size:7.5px;
+  }
+
 }
 </style>
 </head>
@@ -786,9 +886,15 @@ select{
 
       <div class="month-nav">
         <button class="btn btn-ghost" id="prevMonthBtn">‹</button>
-        <button class="btn btn-ghost" id="todayMonthBtn" style="font-size:12px;">
+
+        <button
+          class="btn btn-ghost"
+          id="todayMonthBtn"
+          style="font-size:12px;"
+        >
           本月
         </button>
+
         <button class="btn btn-ghost" id="nextMonthBtn">›</button>
       </div>
 
@@ -987,7 +1093,6 @@ const CONFIG = {
 
   BIN_ID: '6a8ee77cda38895dfe133f1b',
 
-  // ⚠️ 請換成你重新產生的新 JSONBin API Key
   API_KEY: '$2a$10$FudnSrQnUHUoN/4Hp0.1W.QnhE4ToyA7dOSPhqDlUPfehnGs6UtC2'
 
 };
@@ -1413,16 +1518,6 @@ async function loadData(){
       data.record?.shifts || {};
 
 
-    /*
-
-      將成功取得的雲端資料
-      同時存成本機快取。
-
-      注意：
-      這只是備援，不是跨裝置同步。
-
-    */
-
     localStorage.setItem(
 
       'shift-data-cache',
@@ -1473,13 +1568,6 @@ async function loadData(){
       e
     );
 
-
-    /*
-
-      如果雲端失敗，
-      嘗試使用這台裝置之前留下的快取。
-
-    */
 
     const local =
       localStorage.getItem(
@@ -1538,15 +1626,6 @@ async function loadData(){
    ========================================================= */
 
 async function saveData(){
-
-  /*
-
-    先保存本機快取。
-
-    即使雲端暫時失敗，
-    目前裝置仍然不會立即遺失資料。
-
-  */
 
   localStorage.setItem(
 
