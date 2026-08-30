@@ -2067,14 +2067,14 @@ function renderMonth(){
         </span>`;
 
 
-      if(info.type !== 'leave'){
+     if(info.type !== 'leave'){
 
-  const timeParts = info.time.split('–');
+  const [startTime, endTime] =
+    info.time.split('–');
 
   inner +=
     `<span class="mini-time">
-      <span>${timeParts[0]}</span>
-      <span>${timeParts[1]}</span>
+      ${startTime}<br>${endTime}
     </span>`;
 
       }
