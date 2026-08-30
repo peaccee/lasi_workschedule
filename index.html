@@ -2069,11 +2069,13 @@ function renderMonth(){
 
       if(info.type !== 'leave'){
 
-        inner +=
-          `<span class="mini-time">
-           <span>${timeParts[0]}</span>
-           <span>${timeParts[1]}</span>
-          </span>`;
+  const timeParts = info.time.split('–');
+
+  inner +=
+    `<span class="mini-time">
+      <span>${timeParts[0]}</span>
+      <span>${timeParts[1]}</span>
+    </span>`;
 
       }
 
